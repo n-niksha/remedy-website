@@ -51,7 +51,7 @@ export default function EvidenceDemo() {
           );
         })}
         <div className="ev-line" style={{ marginTop: 14, fontFamily: "var(--font-sans)", fontSize: 12.5, color: "var(--pink-700)", background: "var(--pink-100)", display: "flex", gap: 8, alignItems: "flex-start" }}>
-          <Alert size={13} /> Line 3 names no medicine or dose — nothing was invented, so it was left out.
+          <Alert size={13} /> Line 3 names no medicine or dose, so no medicine or dose was made up for it.
         </div>
         <p className="muted" style={{ fontFamily: "var(--font-sans)", fontSize: 12, marginTop: 14, marginBottom: 0 }}>
           Sample document for illustration.

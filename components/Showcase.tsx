@@ -7,15 +7,15 @@ import { Sun, Pill, Calendar, Chat, Check, Heart } from "./Icons";
 type Item = { k: ScreenKey; title: string; body: string; Icon: typeof Sun };
 
 const left: Item[] = [
-  { k: "today", title: "Today", body: "What matters right now: the dose that’s due, what’s OK to take, daily goals and what you can’t do yet.", Icon: Sun },
+  { k: "today", title: "Today", body: "What matters right now: a countdown and what to stop before surgery; after it, the dose that’s due, daily goals and what you can’t do yet.", Icon: Sun },
   { k: "medicine", title: "Medicines", body: "Sorted into take every day, only when needed, stopped for now and finished — with brand and generic names.", Icon: Pill },
-  { k: "plan", title: "Plan", body: "A journey from before surgery to recovery. Pick a day to see what’s allowed, visits and to-dos.", Icon: Calendar },
+  { k: "plan", title: "Plan", body: "Your journey from before surgery to recovery. Pick a day, or see every key day on one timeline. Visits have Call, Directions and Add to Calendar.", Icon: Calendar },
 ];
 
 const right: Item[] = [
-  { k: "ask", title: "Ask", body: "“Can I take Advil?” Answers come only from your papers — and emergency words always get “Call 911” first.", Icon: Chat },
+  { k: "ask", title: "Ask", body: "“Can I take Advil?” Answers come only from your plan, with the line they came from. Emergency words always get “Call 911” first.", Icon: Chat },
   { k: "confirm", title: "Confirm", body: "One item at a time, with the exact line from your papers. Looks right, Edit, or Not on my papers.", Icon: Check },
-  { k: "simple", title: "Simple look", body: "Big tiles, big buttons, one thing per screen and “Read to me” — for anyone who finds phones hard.", Icon: Heart },
+  { k: "simple", title: "Simple look", body: "Big tiles, big buttons, one thing per screen, almost no scrolling and “Read to me” — for anyone who finds phones hard.", Icon: Heart },
 ];
 
 export default function Showcase() {
@@ -30,7 +30,7 @@ export default function Showcase() {
         <button
           key={k}
           className={`show-item ${isOn(k) ? "on" : ""}`}
-          onClick={() => setScreen(k)}
+          onClick={() => setScreen(k === "confirm" ? "scan" : k)}
           data-reveal
           style={{ ["--d" as string]: i }}
         >

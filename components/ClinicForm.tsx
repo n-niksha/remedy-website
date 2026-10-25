@@ -12,7 +12,6 @@ export default function ClinicForm() {
       <div className="glass" style={{ padding: 48, textAlign: "center", display: "grid", gap: 14, justifyItems: "center" }}>
         <span className="feature-ico"><Check size={24} /></span>
         <h3 className="h-2">Thanks — we’ll be in touch.</h3>
-        <p className="muted" style={{ margin: 0 }}>Expect a reply within two business days.</p>
         <button className="btn btn-glass btn-sm" onClick={() => setSent(false)}>Send another request</button>
       </div>
     );

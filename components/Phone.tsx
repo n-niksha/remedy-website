@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { createContext, useContext, useEffect, useRef, useState } from "react";
-import { Calendar, Chat, Check, Pill, Scan, Sun, Alert, Doc, Heart } from "./Icons";
+import { Calendar, Chat, Check, Pill, Sun, Alert, Doc, Heart } from "./Icons";
 
 export type ScreenKey = "today" | "medicine" | "detail" | "plan" | "ask" | "scan" | "confirm" | "simple" | "help";
 
@@ -51,7 +51,7 @@ function Today() {
   const { go, openMed } = useContext(PhoneCtx);
   return (
     <>
-      <div className="s-sub" style={{ marginBottom: 0 }}>Day 4 after surgery · Sun, Oct 25</div>
+      <div className="s-sub" style={{ marginBottom: 0 }}>Day 4 of recovery · Sun, Oct 25</div>
       <div className="s-title">Good morning</div>
 
       <div className="s-card" style={{ marginTop: 8, background: "linear-gradient(160deg,#fff,var(--mint-100))" }}>
@@ -154,7 +154,7 @@ const meds: Record<string, { names: string; verdict: string; sub: string; stop?:
     stop: true,
     quote: "Stop ibuprofen (Motrin, Advil) 4 days before surgery. Do not restart until 1 week after surgery.",
     src: "Pre-op instructions · page 1",
-    extra: ["For pain instead", "Tylenol is OK to take — see Medicines"],
+    extra: ["OK to take again", "Day 7 after surgery · Oct 28"],
   },
   Aspirin: {
     names: "325 mg tablet",
@@ -163,13 +163,13 @@ const meds: Record<string, { names: string; verdict: string; sub: string; stop?:
     stop: true,
     quote: "Aspirin 325mg: hold 7 days before surgery until cleared by surgeon.",
     src: "Pre-op instructions · page 1",
-    extra: ["Ask at your visit", "Post-op visit · Day 10"],
+    extra: ["Next visit", "Post-op visit · Day 10"],
   },
   Cephalexin: {
     names: "Antibiotic · also called Keflex",
     verdict: "Take at 8 AM, 2 PM and 8 PM",
     sub: "500 mg · 1 capsule with food · until finished",
-    quote: "Cephalexin 500mg by mouth every 6–8 hours with food until all tablets are finished.",
+    quote: "Cephalexin 500mg by mouth at 8 AM, 2 PM and 8 PM with food until all tablets are finished, to prevent infection.",
     src: "Discharge papers · page 2",
     extra: ["Reason", "To prevent infection"],
   },
@@ -179,7 +179,7 @@ const meds: Record<string, { names: string; verdict: string; sub: string; stop?:
     sub: "25 mg · keep taking every day",
     quote: "Continue metoprolol 25mg twice daily, including the morning of surgery.",
     src: "Pre-op instructions · page 1",
-    extra: ["Reason", "Blood pressure"],
+    extra: ["Surgery day", "Take it that morning too"],
   },
   Tylenol: {
     names: "Also called acetaminophen",
@@ -313,15 +313,15 @@ const qa: Record<string, { a: React.ReactNode; quote?: string; emergency?: boole
     quote: "Do not restart until 1 week after surgery.” · p. 1",
   },
   "Can I shower?": {
-    a: <><b>Yes.</b> Showering is allowed from today. Pat the incision dry — no baths yet.</>,
-    quote: "You may shower 48 hours after surgery. No tub baths.” · p. 2",
+    a: <><b>Yes.</b> Showering is OK from Day 2 after surgery. No tub baths.</>,
+    quote: "You may shower 2 days after surgery. No tub baths.” · p. 2",
   },
   "What do I take today?": {
     a: <><b>Cephalexin</b> at 8 AM, 2 PM and 8 PM, and <b>Metoprolol</b> at 8 AM and 8 PM. Tylenol only if needed.</>,
   },
   "When is my next visit?": {
     a: <><b>Post-op visit, Day 10</b> — Sat, Oct 31 at 10:30 AM with Dr. Rivera.</>,
-    quote: "Follow up with Dr. Rivera in 10–14 days.” · p. 3",
+    quote: "Post-op visit: Saturday, October 31, 2026, 10:30 AM, Dr. Rivera.” · p. 3",
   },
   "I have chest pain": { a: <b style={{ color: "#c62828" }}>Call 911 now.</b>, emergency: true },
 };
@@ -332,7 +332,7 @@ function Ask() {
   return (
     <>
       <div className="s-title">Ask</div>
-      <div className="s-sub">Answers come only from your own papers</div>
+      <div className="s-sub">Answers come only from your own plan</div>
       {thread.map((q) => {
         const r = qa[q];
         return (
@@ -607,16 +607,7 @@ export default function Phone({
         </div>
         {!noTabs && (
           <div className="tabbar">
-            {tabs.slice(0, 2).map(({ k, label, Icon }) => (
-              <button key={k} className={`tab ${activeTab === k ? "on" : ""}`} onClick={() => go(k)}>
-                <Icon size={18} />
-                {label}
-              </button>
-            ))}
-            <button className="tab-scan" aria-label="Scan papers" onClick={() => go("scan")}>
-              <Scan size={20} />
-            </button>
-            {tabs.slice(2).map(({ k, label, Icon }) => (
+            {tabs.map(({ k, label, Icon }) => (
               <button key={k} className={`tab ${activeTab === k ? "on" : ""}`} onClick={() => go(k)}>
                 <Icon size={18} />
                 {label}

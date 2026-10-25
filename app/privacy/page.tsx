@@ -34,8 +34,8 @@ export default function Privacy() {
             <h2>How your papers are read</h2>
             <ul>
               <li>Text is recognised on your phone with Apple’s Vision framework.</li>
-              <li>Names, record numbers, birthdays, addresses and similar details are removed on your phone — first by fixed rules, then by Apple’s on-device AI. You can see the cleaned page.</li>
-              <li>The cleaned text is read by Apple’s Private Cloud Compute, which does not store requests. If unavailable, Remedy may use Google Gemini (cleaned text only) or Apple’s on-device model.</li>
+              <li>Names, record numbers, birthdays, addresses and similar details are removed on your phone — by fixed rules, Apple’s on-device name finder and Apple’s on-device AI. The page photo is blacked out on your phone too. You can see exactly what was sent.</li>
+              <li>The cleaned text and blacked-out photos are read by Google Gemini (you can switch the photos off in Settings). If Gemini isn’t available, Remedy uses Apple’s on-device AI, which never leaves your phone.</li>
               <li>Connections are HTTPS only and nothing is cached.</li>
             </ul>
             <h2>Hospital and Apple Health imports</h2>

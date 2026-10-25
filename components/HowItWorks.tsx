@@ -11,11 +11,11 @@ const steps = [
   },
   {
     title: "Personal details are removed on your phone",
-    body: "Names, record numbers, birthdays and addresses are blacked out on-device — by fixed rules, then Apple’s on-device AI — before the text is sent for reading.",
+    body: "Names, record numbers, birthdays, addresses and patient stickers are blacked out on-device — by fixed rules, Apple’s name finder and Apple’s on-device AI — before anything is sent for reading.",
   },
   {
     title: "AI finds every instruction — then gets checked",
-    body: "Medicines, rules, to-dos and visits are pulled out word for word. Anything that isn’t actually on the page is thrown out.",
+    body: "Medicines, rules, to-dos, visits and phone numbers are pulled out word for word. Anything that isn’t actually on the page is thrown out.",
   },
   {
     title: "You confirm each item",
@@ -23,7 +23,7 @@ const steps = [
   },
   {
     title: "Follow a simple daily plan",
-    body: "Reminders at every dose time with “I took it” right on the notification, plus Siri, widgets and visit alerts.",
+    body: "Today shows what to take and what to stop. Reminders at every dose time have “I took it” right on the notification, plus Siri, widgets and visit alerts.",
   },
 ];
 
@@ -66,7 +66,7 @@ function Stage({ i }: { i: number }) {
     return (
       <div style={{ display: "grid", gap: 18, justifyItems: "center", width: "100%" }}>
         <div className="doc doc-text" style={{ width: "100%", maxWidth: 380, fontSize: 11.5 }}>
-          <div>Patient: <span className="redact" style={{ animationDelay: "300ms" }}>Margaret J. Rivera</span></div>
+          <div>Patient: <span className="redact" style={{ animationDelay: "300ms" }}>Margaret J. Collins</span></div>
           <div>MRN: <span className="redact" style={{ animationDelay: "500ms" }}>0048213977</span> &nbsp;DOB: <span className="redact" style={{ animationDelay: "700ms" }}>03/14/1951</span></div>
           <div>Address: <span className="redact" style={{ animationDelay: "900ms" }}>12 Oak Ln, Springfield</span></div>
           <div style={{ marginTop: 8 }}>Stop ibuprofen (Motrin, Advil) 4 days before surgery.</div>
@@ -83,7 +83,7 @@ function Stage({ i }: { i: number }) {
   if (i === 2) {
     const words: [string, string?][] = [
       ["Stop"], ["ibuprofen", "med"], ["(Motrin, Advil)", "med"], ["4 days", "time"], ["before"], ["surgery.", "time"],
-      ["Take"], ["cephalexin", "med"], ["500mg", "med"], ["every 8 hours", "time"],
+      ["Take"], ["cephalexin", "med"], ["500mg", "med"], ["3 times a day", "time"],
       ["No"], ["driving"], ["for"], ["2 weeks.", "time"], ["Follow"], ["up"], ["in"], ["10–14 days.", "time"],
     ];
     return (
@@ -109,7 +109,7 @@ function Stage({ i }: { i: number }) {
       <div style={{ width: "100%", display: "grid", justifyItems: "center" }}>
         {[
           { n: "Stop taking: Ibuprofen (Motrin, Advil)", s: "“…4 days before surgery.” · p.1", st: "Looks right", c: "pill-mint" },
-          { n: "Take every day: Cephalexin 500 mg", s: "“…every 8 hours until finished.” · p.2", st: "Looks right", c: "pill-mint" },
+          { n: "Take every day: Cephalexin 500 mg", s: "“…3 times a day until finished.” · p.2", st: "Looks right", c: "pill-mint" },
           { n: "Call to book your post-op visit", s: "No full date on your papers", st: "Needs you", c: "pill-pink" },
         ].map((d, k) => (
           <div key={k} className="draft-card glass" style={{ animation: `notifIn .6s ${k * 150}ms both cubic-bezier(.22,1,.36,1)` }}>

@@ -16,21 +16,23 @@ import {
 
 const tech = [
   "Apple Foundation Models",
-  "Private Cloud Compute",
-  "VisionKit",
+  "Google Gemini",
+  "Vision · VisionKit",
+  "NaturalLanguage",
   "Epic MyChart",
   "SMART on FHIR",
   "HealthKit",
   "App Intents · Siri",
   "WidgetKit",
+  "EventKit",
   "SwiftData",
 ];
 
 const sources = [
   { Icon: Scan, t: "Camera scan", b: "Apple’s document scanner finds the edges, flattens the page and handles several pages in a row." },
   { Icon: Sun, t: "Photos", b: "Already took pictures of your papers? Pick them from your photo library." },
-  { Icon: Doc, t: "PDF", b: "Open a PDF from Files — like one downloaded from your patient portal." },
-  { Icon: Building, t: "MyChart (Epic)", b: "Sign in on your hospital’s own page and import medicines and visits. No AI needed." },
+  { Icon: Doc, t: "PDF", b: "Open a PDF from Files — like one downloaded from your patient portal. Picture-only pages are read like a scan." },
+  { Icon: Building, t: "MyChart (Epic)", b: "Sign in on your hospital’s own page and import medicines and visits. No AI needed — you still confirm every item." },
   { Icon: Heart, t: "Health Records", b: "Import medication records your hospital already shares with Apple Health." },
 ];
 
@@ -41,15 +43,21 @@ const rules = [
   { Icon: Calendar, t: "No guessed dates", b: "“4 days before” is kept only if that number is written. Visit dates need a full 4-digit year — otherwise it becomes “Call to book”." },
   { Icon: Alert, t: "Emergencies come first", b: "In Ask, words like “chest pain” always get “Call 911 now”. Warning signs get “Call your surgeon’s office”." },
   { Icon: Lock, t: "Same answer, every time", b: "Structured output and zero temperature mean the same papers give the same plan. Instructions hidden in papers are ignored." },
+  { Icon: Scan, t: "A made-up page can’t replace yours", b: "If Gemini’s clean copy of a page drops too many of the words your phone read, Remedy throws it out and uses your phone’s own text." },
+  { Icon: Pill, t: "Careful typo fixing", b: "Misread letters like “lbuprofen” are fixed on your phone — but medicine names, numbers and doses are never changed." },
+  { Icon: Calendar, t: "Your surgery date, not a visit date", b: "A labelled line like “Date of surgery” always wins. You confirm the date at the end — already filled in, so it’s one tap." },
 ];
 
 const everywhere = [
   { Icon: Bell, t: "Actionable reminders", b: "A notification at every dose time with “I took it” and “Snooze 10 minutes” — no need to open the app." },
   { Icon: Chat, t: "Siri & Shortcuts", b: "“Hey Siri, what do I take in Remedy?” reads out what’s due. “I took my medicine” logs it." },
-  { Icon: PhoneIco, t: "Home & Lock Screen widget", b: "What’s due now and the next dose — or what to stop before surgery — at a glance." },
-  { Icon: Calendar, t: "Calendar & Reminders", b: "Add visits to Calendar with alerts the day before and 2 hours before. Send to-dos to Reminders." },
+  { Icon: PhoneIco, t: "Home & Lock Screen widgets", b: "Today shows what’s due now and how many doses are taken. Journey counts down to surgery and through recovery." },
+  { Icon: Calendar, t: "Calendar & Reminders", b: "Add visits to Calendar with alerts 1 day and 2 hours before. Visit, stop-day and to-do reminders, and to-dos in the Reminders app." },
   { Icon: Heart, t: "Apple Health steps", b: "Today’s step count right next to your walking goal." },
   { Icon: Users, t: "Accessible by default", b: "Dynamic Type, VoiceOver, Reduce Motion, “Read to me”, and plain words instead of medical shorthand." },
+  { Icon: Doc, t: "Share & print", b: "An overview, a single day, your medicines or the whole journey as a PDF — for the fridge or a family member." },
+  { Icon: Alert, t: "Help on every screen", b: "A big 911 button, the warning signs to watch for, and tap-to-call for your care team and pharmacy." },
+  { Icon: Sun, t: "Four themes, Liquid Glass", b: "Remedy, Light, Dark or Sunrise, with the iOS 26 Liquid Glass design and a “next up” bar above the tabs." },
 ];
 
 const roadmap = [
@@ -78,15 +86,15 @@ const faqs = [
   },
   {
     q: "What happens to my personal information?",
-    a: "Before your papers are sent for reading, Remedy removes names, record numbers, birthdays and addresses on your phone, and shows you the cleaned page. Your plan, papers and chat are saved only on your phone. There’s no Remedy account and no Remedy server.",
+    a: "Before anything is sent for reading, Remedy removes names, record numbers, birthdays, addresses and patient stickers on your phone, in four layers, and shows you exactly what was sent. Your plan, papers and chat are saved only on your phone. There’s no Remedy account and no Remedy server.",
   },
   {
     q: "Which AI does Remedy use?",
-    a: "By default, Apple’s Private Cloud Compute, which doesn’t store requests. If it’s unavailable, Remedy can fall back to Google Gemini (which only ever receives the cleaned text) or Apple’s on-device model, which works with no internet.",
+    a: "Google Gemini reads your papers first. It only ever gets the cleaned text and blacked-out photos (you can switch the photos off). If it can’t, Remedy falls back to Apple’s on-device AI, which works with no internet. The screen always shows which AI read your papers.",
   },
   {
     q: "What if the AI gets something wrong?",
-    a: "Everything the AI returns is checked against your papers in code: quotes must be on the page, doses must be written, and dates are never guessed. Then you confirm every item yourself, next to the exact line it came from.",
+    a: "Everything the AI returns is checked against your papers in code: quotes must be on the page, doses must be written, and dates are never guessed. If anything was left out, you see a “Check this” note. Then you confirm every item yourself, next to the exact line it came from.",
   },
   {
     q: "Is it easy to use for older adults?",
@@ -132,7 +140,7 @@ export default function Home() {
               </Link>
             </div>
             <div className="hero-meta" data-reveal style={{ ["--d" as string]: 4 }}>
-              <span className="check"><Check /> Every item from your own papers</span>
+              <span className="check"><Check /> Every item from your own papers or record</span>
               <span className="check"><Check /> You confirm everything</span>
               <span className="check"><Check /> No account needed</span>
             </div>
@@ -279,8 +287,8 @@ export default function Home() {
               AI that <span className="serif mint-text">shows its work.</span>
             </h2>
             <p className="lead" data-reveal>
-              Remedy doesn’t trust the AI. Its answers are checked against your papers in code, and every item shows the
-              exact line it came from. Try it — hover an item, then confirm it.
+              Remedy doesn’t trust the AI. Its answers are checked against your papers in code, and every item from your
+              papers shows the exact line it came from. Try it — hover an item, then confirm it.
             </p>
           </div>
           <EvidenceDemo />
@@ -309,14 +317,15 @@ export default function Home() {
                 Cleaned on your phone, <span className="serif" style={{ color: "var(--mint-300)" }}>before anything leaves it.</span>
               </h2>
               <p className="lead" style={{ marginTop: 18 }}>
-                Names, record numbers and other personal details are removed on your phone before text is sent for
-                reading. Your plan lives on your phone. No account, no sign-up, no Remedy server.
+                Names, record numbers and other personal details are removed on your phone before anything is sent
+                for reading. Your plan lives on your phone. No account, no sign-up, no Remedy server.
               </p>
               <ul className="check-list">
-                <li><Check size={18} /> Personal details removed on-device — you can see “What the AI sees”</li>
-                <li><Check size={18} /> Reading runs on Apple’s Private Cloud Compute, which doesn’t store requests</li>
+                <li><Check size={18} /> Four layers on-device: fixed rules, Apple’s name finder, Apple’s on-device AI, then every copy of a name is hidden</li>
+                <li><Check size={18} /> The photo is blacked out too, sticker and barcode included — see “What the AI sees”, page by page</li>
+                <li><Check size={18} /> Gemini only gets cleaned text and blacked-out photos; the on-device AI never leaves your phone</li>
                 <li><Check size={18} /> Plan, papers and chat saved only on your phone</li>
-                <li><Check size={18} /> Hospital sign-in is read-only; your password is typed only on the hospital’s page</li>
+                <li><Check size={18} /> Hospital sign-in is read-only; your password is typed only on the hospital’s page, and the access is forgotten after import</li>
               </ul>
             </div>
             <div className="device-orb" aria-hidden>
@@ -358,13 +367,13 @@ export default function Home() {
           <div className="section-head center">
             <span className="eyebrow" data-reveal>Who it’s for</span>
             <h2 className="h-1" data-reveal>
-              Built for patients. <span className="serif mint-text">Loved by caregivers.</span>
+              Built for patients. <span className="serif mint-text">And the people who help them.</span>
             </h2>
           </div>
           <div className="grid-3">
             {[
               { Icon: Heart, t: "Older adults", b: "The Simple look: big tiles, big buttons, one thing per screen and “Read to me” for every screen.", bg: "linear-gradient(135deg,#fde7ee,#fbc2d3)", c: "var(--pink-700)" },
-              { Icon: Users, t: "Families & caregivers", b: "One clear plan everyone can follow, instead of a folder of papers on the kitchen table.", bg: "linear-gradient(135deg,#dcf6ee,#8fdfc9)", c: "var(--mint-700)" },
+              { Icon: Users, t: "Families & caregivers", b: "One clear plan everyone can follow — shared or printed as a PDF — instead of a folder of papers on the kitchen table.", bg: "linear-gradient(135deg,#dcf6ee,#8fdfc9)", c: "var(--mint-700)" },
               { Icon: Building, t: "Surgical teams & clinics", b: "Help patients follow the instructions you already give them — before and after surgery.", bg: "linear-gradient(135deg,#fbf8f5,#efe9e5)", c: "var(--ink)" },
             ].map(({ Icon, t, b, bg, c }, i) => (
               <div className="aud glass feature" data-spot data-reveal style={{ ["--d" as string]: i }} key={t}>
@@ -466,7 +475,7 @@ export default function Home() {
             <div style={{ maxWidth: 620 }}>
               <span className="eyebrow"><Building size={14} /> For medical centers</span>
               <h2 className="h-2" style={{ marginTop: 16 }}>Give every surgical patient a plan they’ll actually follow.</h2>
-              <p className="muted" style={{ margin: "10px 0 0" }}>Works with Epic MyChart via SMART on FHIR. We’re partnering with a small group of clinics for our pilot.</p>
+              <p className="muted" style={{ margin: "10px 0 0" }}>Patients can import from Epic MyChart via SMART on FHIR, tested on Epic’s developer sandbox. We’re partnering with a small group of clinics for our pilot.</p>
             </div>
             <Link href="/clinics" className="btn btn-primary" data-magnetic>
               Partner with us <Arrow />

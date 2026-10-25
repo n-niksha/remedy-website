@@ -8,24 +8,24 @@ import { Arrow, Check, Shield, Chart, Users, Doc, Lock, Building, Heart, Phone a
 
 export const metadata: Metadata = {
   title: "For clinics — Remedy",
-  description: "Help surgical patients follow your instructions at home. Works with Epic MyChart via SMART on FHIR; read-only, no Remedy server.",
+  description: "Help surgical patients follow your instructions at home. Imports from Epic MyChart via SMART on FHIR; read-only, no Remedy server.",
 };
 
 const benefits = [
-  { Icon: Heart, t: "Better adherence at home", b: "Patients get a day-by-day plan built from the instructions you already give them — not a generic template." },
-  { Icon: Building, t: "Works with MyChart — no custom build", b: "Patients can import medicines and visits from Epic via SMART on FHIR, the standard your patient apps already use. Or they simply scan the papers you hand them." },
+  { Icon: Heart, t: "Your instructions, not a template", b: "Patients get a day-by-day plan built from the instructions you already give them — not a generic template." },
+  { Icon: Building, t: "Built on the MyChart standard", b: "Patients can import medicines and visits from Epic via SMART on FHIR, the standard your patient apps already use — tested on Epic’s developer sandbox. Or they simply scan the papers you hand them." },
   { Icon: Lock, t: "Read-only, no Remedy server", b: "Remedy never writes to the hospital record. It requests only medicines and appointments, keeps the token in memory, and forgets it after import." },
-  { Icon: Shield, t: "Clinically cautious AI", b: "Quotes must match the page, doses must be written, and dates are never guessed. Every item is confirmed by the patient." },
+  { Icon: Shield, t: "AI checked against the page", b: "Quotes must match the page, doses must be written, and dates are never guessed. Every item is confirmed by the patient." },
   { Icon: Users, t: "Built for older patients", b: "A Simple look with big buttons and “Read to me”, plus a plan family members can follow too." },
-  { Icon: Chart, t: "Fewer avoidable callbacks", impact: true },
+  { Icon: Chart, t: "Expected impact", impact: true },
 ];
 
 const compare = [
   ["Medication timing", "Patient works it out", "Reminders at every dose, with “I took it”"],
   ["“Stop 4 days before surgery”", "Easy to miscount", "Counted from surgery day — moves if the date changes"],
   ["Finding an instruction later", "Search through pages", "Ask in plain language — answers quote the paper"],
-  ["Warning signs", "Buried on page 3", "“Call your surgeon” or “Call 911” first, every time"],
-  ["Accuracy check", "None", "Source line shown on every item"],
+  ["Warning signs", "Buried on page 3", "Ask answers “Call 911” or “Call your surgeon” first"],
+  ["Accuracy check", "None", "Checked against the page, with the source line shown"],
   ["Where the plan lives", "Kitchen table", "On the patient’s phone — no account, no Remedy server"],
 ];
 
@@ -33,7 +33,7 @@ export default function Clinics() {
   const pilot = [
     { t: "Intro call", b: "30 minutes to understand your patient population and pre-op / discharge workflow." },
     { t: "Pick a cohort", b: "Choose a service line — e.g. orthopedics, cardiac or general surgery." },
-    { t: "Hand off at pre-op", b: "Staff share a one-page QR card. Patients scan their papers or import from MyChart at home." },
+    { t: "Hand off at pre-op", b: "Staff tell patients about Remedy. Patients scan their papers or import from MyChart at home." },
     { t: "Review results", b: site.clinics.pilotMeasures, ph: "what you measure: surveys, call volume, missed doses…" },
   ];
 
@@ -148,7 +148,7 @@ export default function Clinics() {
           <div className="section-head">
             <span className="eyebrow" data-reveal>Pilot program</span>
             <h2 className="h-1" data-reveal>
-              Live with your patients in <span className="serif mint-text">weeks.</span>
+              Four steps to <span className="serif mint-text">your first cohort.</span>
             </h2>
             {(site.clinics.pilotTerms || SHOW_PLACEHOLDERS) && (
               <p className="lead" data-reveal>
@@ -176,9 +176,9 @@ export default function Clinics() {
             <span className="feature-ico"><Doc size={22} /></span>
             <h3>Technical overview</h3>
             <p>
-              Swift and SwiftUI. VisionKit, Vision and PDFKit for reading; personal details removed on-device before text
-              is sent for reading. Apple Foundation Models (Private Cloud Compute, then on-device) with guided generation;
-              Gemini as a backup on cleaned text only. SMART on FHIR with OAuth 2.0 + PKCE, FHIR R4 and DSTU2, tested on
+              Swift and SwiftUI. VisionKit, Vision and PDFKit for reading; personal details removed on-device before anything
+              is sent for reading. Google Gemini (JSON schema, cleaned text and blacked-out photos only), with Apple Foundation Models on-device
+              as the fallback (guided generation); Private Cloud Compute support is built in, off until Apple approves access. SMART on FHIR with OAuth 2.0 + PKCE, FHIR R4 and DSTU2, tested on
               Epic’s sandbox. HealthKit, EventKit, App Intents, WidgetKit, SwiftData.
             </p>
             {site.clinics.techBriefUrl ? (
@@ -194,7 +194,7 @@ export default function Clinics() {
             <h3>What patients need</h3>
             <p>
               An iPhone, the papers you already give them, and nothing else — no Remedy account, no sign-up. Works with
-              printed papers, photos, PDFs, MyChart and Apple Health Records.
+              printed papers, photos, PDFs, and MyChart or Apple Health Records where the hospital supports them.
             </p>
             {(site.clinics.requirements || SHOW_PLACEHOLDERS) && (
               <p>
