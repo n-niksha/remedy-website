@@ -1,0 +1,508 @@
+import Link from "next/link";
+import Image from "next/image";
+import HeroVisual from "@/components/HeroVisual";
+import VideoSection from "@/components/VideoSection";
+import HowItWorks from "@/components/HowItWorks";
+import Showcase from "@/components/Showcase";
+import EvidenceDemo from "@/components/EvidenceDemo";
+import Waitlist from "@/components/Waitlist";
+import FAQ from "@/components/FAQ";
+import Capsule from "@/components/Capsule";
+import Ph, { Note } from "@/components/Ph";
+import { site, SHOW_PLACEHOLDERS, type Person } from "@/lib/site";
+import {
+  Arrow, Check, Shield, Doc, Calendar, Lock, Users, Heart, Building, Alert, Pill, Quote, Scan, Bell, Chat, Phone as PhoneIco, Sun, Spark,
+} from "@/components/Icons";
+
+const tech = [
+  "Apple Foundation Models",
+  "Private Cloud Compute",
+  "VisionKit",
+  "Epic MyChart",
+  "SMART on FHIR",
+  "HealthKit",
+  "App Intents · Siri",
+  "WidgetKit",
+  "SwiftData",
+];
+
+const sources = [
+  { Icon: Scan, t: "Camera scan", b: "Apple’s document scanner finds the edges, flattens the page and handles several pages in a row." },
+  { Icon: Sun, t: "Photos", b: "Already took pictures of your papers? Pick them from your photo library." },
+  { Icon: Doc, t: "PDF", b: "Open a PDF from Files — like one downloaded from your patient portal." },
+  { Icon: Building, t: "MyChart (Epic)", b: "Sign in on your hospital’s own page and import medicines and visits. No AI needed." },
+  { Icon: Heart, t: "Health Records", b: "Import medication records your hospital already shares with Apple Health." },
+];
+
+const rules = [
+  { Icon: Shield, t: "Nothing is used until you confirm", b: "Every item from the AI or the hospital waits for your “Looks right” before it enters your plan." },
+  { Icon: Doc, t: "Every quote must be on the page", b: "A medicine, rule, to-do or visit whose quote can’t be found in your papers is thrown out." },
+  { Icon: Pill, t: "No invented doses", b: "A strength or amount that isn’t written on the page is removed. Missing stays missing." },
+  { Icon: Calendar, t: "No guessed dates", b: "“4 days before” is kept only if that number is written. Visit dates need a full 4-digit year — otherwise it becomes “Call to book”." },
+  { Icon: Alert, t: "Emergencies come first", b: "In Ask, words like “chest pain” always get “Call 911 now”. Warning signs get “Call your surgeon’s office”." },
+  { Icon: Lock, t: "Same answer, every time", b: "Structured output and zero temperature mean the same papers give the same plan. Instructions hidden in papers are ignored." },
+];
+
+const everywhere = [
+  { Icon: Bell, t: "Actionable reminders", b: "A notification at every dose time with “I took it” and “Snooze 10 minutes” — no need to open the app." },
+  { Icon: Chat, t: "Siri & Shortcuts", b: "“Hey Siri, what do I take in Remedy?” reads out what’s due. “I took my medicine” logs it." },
+  { Icon: PhoneIco, t: "Home & Lock Screen widget", b: "What’s due now and the next dose — or what to stop before surgery — at a glance." },
+  { Icon: Calendar, t: "Calendar & Reminders", b: "Add visits to Calendar with alerts the day before and 2 hours before. Send to-dos to Reminders." },
+  { Icon: Heart, t: "Apple Health steps", b: "Today’s step count right next to your walking goal." },
+  { Icon: Users, t: "Accessible by default", b: "Dynamic Type, VoiceOver, Reduce Motion, “Read to me”, and plain words instead of medical shorthand." },
+];
+
+const roadmap = [
+  { s: "done", label: "Built", t: "iOS app", b: "Scanning, redaction, AI extraction with checks, Confirm, Today, Plan, Ask, reminders, Siri and widgets." },
+  { s: "done", label: "Built", t: "Hospital import", b: "MyChart via SMART on FHIR and Apple Health Records — tested on Epic’s developer sandbox." },
+  { s: "now", label: "In progress", t: "Beta on real iPhones", b: "End-to-end testing with real pre-op and discharge papers.", when: site.roadmap.beta },
+  { s: "next", label: "Next", t: "Clinic pilots", b: "First surgical cohorts with partner clinics.", when: site.roadmap.pilots },
+];
+
+const placeholderStats = [
+  { value: "00%", label: "Lorem ipsum dolor sit amet consectetur adipiscing elit.", source: "% of patients who misunderstand discharge instructions + source" },
+  { value: "0 in 0", label: "Lorem ipsum dolor sit amet, sed do eiusmod tempor.", source: "medication errors or non-adherence after surgery + source" },
+  { value: "$00B", label: "Lorem ipsum dolor sit amet ut labore et dolore magna.", source: "cost of avoidable readmissions or cancelled surgeries + source" },
+];
+
+const placeholderTeam = [
+  { name: "Lorem Ipsum", role: "Co-founder", bio: "Lorem ipsum dolor sit amet, consectetur adipiscing elit sed do." },
+  { name: "Dolor Sit", role: "Co-founder", bio: "Lorem ipsum dolor sit amet, consectetur adipiscing elit sed do." },
+  { name: "Amet Elit", role: "Co-founder", bio: "Lorem ipsum dolor sit amet, consectetur adipiscing elit sed do." },
+];
+
+const faqs = [
+  {
+    q: "What papers can Remedy read?",
+    a: "Pre-op and post-op instructions, discharge papers and after-visit summaries — scanned with the camera, picked from Photos, or opened as a PDF. You can also import medicines and visits from MyChart (Epic) or Apple Health Records.",
+  },
+  {
+    q: "What happens to my personal information?",
+    a: "Before your papers are sent for reading, Remedy removes names, record numbers, birthdays and addresses on your phone, and shows you the cleaned page. Your plan, papers and chat are saved only on your phone. There’s no Remedy account and no Remedy server.",
+  },
+  {
+    q: "Which AI does Remedy use?",
+    a: "By default, Apple’s Private Cloud Compute, which doesn’t store requests. If it’s unavailable, Remedy can fall back to Google Gemini (which only ever receives the cleaned text) or Apple’s on-device model, which works with no internet.",
+  },
+  {
+    q: "What if the AI gets something wrong?",
+    a: "Everything the AI returns is checked against your papers in code: quotes must be on the page, doses must be written, and dates are never guessed. Then you confirm every item yourself, next to the exact line it came from.",
+  },
+  {
+    q: "Is it easy to use for older adults?",
+    a: "Yes. The Simple look has big tiles, big buttons, one thing per screen, almost no scrolling and a “Read to me” button. You can switch between Classic and Simple at any time.",
+  },
+  ...(site.faq.caregivers || SHOW_PLACEHOLDERS
+    ? [{ q: "Can a family member or caregiver help?", a: <Ph value={site.faq.caregivers} note="caregiver / family plans" /> }]
+    : []),
+  ...(site.faq.launchAndDevices || SHOW_PLACEHOLDERS
+    ? [{ q: "When does Remedy launch, and which iPhones are supported?", a: <Ph value={site.faq.launchAndDevices} note="launch timing, TestFlight, pricing, supported iPhones" /> }]
+    : []),
+];
+
+export default function Home() {
+  const stats = site.stats.length ? site.stats : SHOW_PLACEHOLDERS ? placeholderStats : [];
+  const team: Person[] = site.team.length ? site.team : SHOW_PLACEHOLDERS ? placeholderTeam : [];
+  const quote = site.testimonial;
+
+  return (
+    <>
+      {/* ---------- HERO ---------- */}
+      <section className="hero">
+        <div className="container hero-grid">
+          <div className="hero-copy">
+            <span className="eyebrow" data-reveal>
+              <span className="dot" /> Coming soon to iPhone
+            </span>
+            <h1 className="h-display" data-reveal style={{ ["--d" as string]: 1 }}>
+              Recovery,
+              <br />
+              <span className="serif mint-text">made simple.</span>
+            </h1>
+            <p className="lead" data-reveal style={{ ["--d" as string]: 2 }}>
+              Remedy turns the papers you get before and after surgery into a simple, day-by-day plan — what to take,
+              what to stop, what you can and can’t do yet, and when your visits are.
+            </p>
+            <div className="hero-actions" data-reveal style={{ ["--d" as string]: 3 }}>
+              <Link href="#waitlist" className="btn btn-primary" data-magnetic>
+                Join the waitlist <Arrow />
+              </Link>
+              <Link href="#demo" className="btn btn-glass" data-magnetic>
+                Watch the demo
+              </Link>
+            </div>
+            <div className="hero-meta" data-reveal style={{ ["--d" as string]: 4 }}>
+              <span className="check"><Check /> Every item from your own papers</span>
+              <span className="check"><Check /> You confirm everything</span>
+              <span className="check"><Check /> No account needed</span>
+            </div>
+          </div>
+          <div data-reveal style={{ ["--d" as string]: 2 }}>
+            <HeroVisual />
+          </div>
+        </div>
+        <span className="scroll-hint" aria-hidden />
+      </section>
+
+      {/* ---------- BUILT ON ---------- */}
+      <section className="section-tight" style={{ paddingTop: 0 }}>
+        <div className="container tech-strip">
+          <span className="label">Built on</span>
+          <div className="marquee">
+            <div className="marquee-track">
+              {[...tech, ...tech].map((p, i) => (
+                <span className="marquee-item" key={i}>
+                  <Spark size={16} /> {p}
+                </span>
+              ))}
+            </div>
+          </div>
+        </div>
+        {(site.partners.length > 0 || SHOW_PLACEHOLDERS) && (
+          <div className="container" style={{ textAlign: "center", marginTop: 28 }}>
+            {site.partners.length > 0 ? (
+              <p className="muted" style={{ fontSize: 14, margin: 0 }}>
+                Piloting with {site.partners.join(" · ")}
+              </p>
+            ) : (
+              <Note>optional: pilot / partner clinic names — set partners in lib/site.ts</Note>
+            )}
+          </div>
+        )}
+      </section>
+
+      {/* ---------- PROBLEM ---------- */}
+      <section className="section">
+        <div className="container">
+          <div className="section-head">
+            <span className="eyebrow" data-reveal>The problem</span>
+            <h2 className="h-1" data-reveal>
+              Going home is the hardest part of <span className="serif mint-text">getting better.</span>
+            </h2>
+            <p className="lead" data-reveal>
+              Patients leave with pages of dense instructions — medicines to stop days before surgery, new doses after,
+              and rules that change day by day — often while tired, in pain, or relying on family to keep track.
+            </p>
+          </div>
+          {stats.length > 0 && (
+            <div className="stats">
+              {stats.map((s, i) => (
+                <div className="stat glass" data-spot data-reveal style={{ ["--d" as string]: i }} key={i}>
+                  <div className="stat-num mint-text">{s.value}</div>
+                  <p>{s.label}</p>
+                  {site.stats.length ? (
+                    <p className="muted" style={{ marginTop: 10, fontSize: 12.5 }}>Source: {s.source}</p>
+                  ) : (
+                    <p className="ph" style={{ marginTop: 8 }}>(Stat: {s.source})</p>
+                  )}
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      </section>
+
+      {/* ---------- DEMO VIDEO ---------- */}
+      <section className="section" id="demo" style={{ paddingTop: 40 }}>
+        <div className="container">
+          <div className="section-head center">
+            <span className="eyebrow" data-reveal>Demo</span>
+            <h2 className="h-1" data-reveal>
+              From paper to plan in <span className="serif mint-text">minutes.</span>
+            </h2>
+          </div>
+          <VideoSection />
+        </div>
+      </section>
+
+      {/* ---------- HOW IT WORKS ---------- */}
+      <section className="section" id="how">
+        <div className="container">
+          <div className="section-head">
+            <span className="eyebrow" data-reveal>How it works</span>
+            <h2 className="h-1" data-reveal>
+              Five steps. <span className="serif mint-text">Zero guesswork.</span>
+            </h2>
+            <p className="lead" data-reveal>
+              Remedy does the reading and organising. You stay in control of what goes into your plan. Every day is
+              counted from surgery — Day 0 — so changing the date moves the whole plan at once.
+            </p>
+          </div>
+          <div data-reveal>
+            <HowItWorks />
+          </div>
+        </div>
+      </section>
+
+      {/* ---------- SOURCES ---------- */}
+      <section className="section-tight">
+        <div className="container">
+          <div className="section-head">
+            <span className="eyebrow" data-reveal>Five ways in</span>
+            <h2 className="h-2" data-reveal>However your papers arrive, Remedy can read them.</h2>
+          </div>
+          <div className="sources">
+            {sources.map(({ Icon, t, b }, i) => (
+              <div className="source glass" data-spot data-reveal style={{ ["--d" as string]: i }} key={t}>
+                <span className={`feature-ico ${i > 2 ? "pink" : ""}`}><Icon size={22} /></span>
+                <b>{t}</b>
+                <p>{b}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ---------- APP SHOWCASE ---------- */}
+      <section className="section" id="app">
+        <div className="container">
+          <div className="section-head center">
+            <span className="eyebrow" data-reveal>The app</span>
+            <h2 className="h-1" data-reveal>
+              Designed to be <span className="serif mint-text">calm and clear.</span>
+            </h2>
+            <p className="lead" data-reveal>
+              Two looks — Classic and Simple — built on the same plan. Pick a screen, then tap around the phone: it’s
+              interactive.
+            </p>
+          </div>
+          <Showcase />
+        </div>
+      </section>
+
+      {/* ---------- SAFETY ---------- */}
+      <section className="section" id="safety">
+        <div className="container">
+          <div className="section-head">
+            <span className="eyebrow" data-reveal>Safety</span>
+            <h2 className="h-1" data-reveal>
+              AI that <span className="serif mint-text">shows its work.</span>
+            </h2>
+            <p className="lead" data-reveal>
+              Remedy doesn’t trust the AI. Its answers are checked against your papers in code, and every item shows the
+              exact line it came from. Try it — hover an item, then confirm it.
+            </p>
+          </div>
+          <EvidenceDemo />
+
+          <div className="grid-3" style={{ marginTop: 28 }}>
+            {rules.map(({ Icon, t, b }, i) => (
+              <div className="feature glass" data-spot data-reveal style={{ ["--d" as string]: i % 3 }} key={t}>
+                <span className={`feature-ico ${i % 2 ? "pink" : ""}`}><Icon size={22} /></span>
+                <h3>{t}</h3>
+                <p>{b}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ---------- PRIVACY ---------- */}
+      <section className="section-tight">
+        <div className="container">
+          <div className="privacy-band glass glass-dark" data-reveal>
+            <div>
+              <span className="eyebrow" style={{ background: "rgba(255,255,255,.1)", borderColor: "rgba(255,255,255,.2)", color: "var(--mint-200)" }}>
+                <Lock size={14} /> Privacy
+              </span>
+              <h2 className="h-1" style={{ marginTop: 20 }}>
+                Cleaned on your phone, <span className="serif" style={{ color: "var(--mint-300)" }}>before anything leaves it.</span>
+              </h2>
+              <p className="lead" style={{ marginTop: 18 }}>
+                Names, record numbers and other personal details are removed on your phone before text is sent for
+                reading. Your plan lives on your phone. No account, no sign-up, no Remedy server.
+              </p>
+              <ul className="check-list">
+                <li><Check size={18} /> Personal details removed on-device — you can see “What the AI sees”</li>
+                <li><Check size={18} /> Reading runs on Apple’s Private Cloud Compute, which doesn’t store requests</li>
+                <li><Check size={18} /> Plan, papers and chat saved only on your phone</li>
+                <li><Check size={18} /> Hospital sign-in is read-only; your password is typed only on the hospital’s page</li>
+              </ul>
+            </div>
+            <div className="device-orb" aria-hidden>
+              <span className="orb-ring r1" />
+              <span className="orb-ring r2" />
+              <span className="orb-ring r3" />
+              <div className="orb-core">
+                <Shield size={44} strokeWidth={1.5} />
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ---------- EVERYWHERE ---------- */}
+      <section className="section">
+        <div className="container">
+          <div className="section-head center">
+            <span className="eyebrow" data-reveal>Beyond the app</span>
+            <h2 className="h-1" data-reveal>
+              There when you need it — <span className="serif mint-text">even when you don’t open it.</span>
+            </h2>
+          </div>
+          <div className="grid-3">
+            {everywhere.map(({ Icon, t, b }, i) => (
+              <div className="feature glass" data-spot data-reveal style={{ ["--d" as string]: i % 3 }} key={t}>
+                <span className={`feature-ico ${i % 2 ? "" : "pink"}`}><Icon size={22} /></span>
+                <h3>{t}</h3>
+                <p>{b}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ---------- AUDIENCE ---------- */}
+      <section className="section">
+        <div className="container">
+          <div className="section-head center">
+            <span className="eyebrow" data-reveal>Who it’s for</span>
+            <h2 className="h-1" data-reveal>
+              Built for patients. <span className="serif mint-text">Loved by caregivers.</span>
+            </h2>
+          </div>
+          <div className="grid-3">
+            {[
+              { Icon: Heart, t: "Older adults", b: "The Simple look: big tiles, big buttons, one thing per screen and “Read to me” for every screen.", bg: "linear-gradient(135deg,#fde7ee,#fbc2d3)", c: "var(--pink-700)" },
+              { Icon: Users, t: "Families & caregivers", b: "One clear plan everyone can follow, instead of a folder of papers on the kitchen table.", bg: "linear-gradient(135deg,#dcf6ee,#8fdfc9)", c: "var(--mint-700)" },
+              { Icon: Building, t: "Surgical teams & clinics", b: "Help patients follow the instructions you already give them — before and after surgery.", bg: "linear-gradient(135deg,#fbf8f5,#efe9e5)", c: "var(--ink)" },
+            ].map(({ Icon, t, b, bg, c }, i) => (
+              <div className="aud glass feature" data-spot data-reveal style={{ ["--d" as string]: i }} key={t}>
+                <div className="aud-top" style={{ background: bg }}>
+                  <span className="feature-ico" style={{ width: 72, height: 72, borderRadius: 24, color: c }}>
+                    <Icon size={32} />
+                  </span>
+                </div>
+                <div className="aud-body">
+                  <h3>{t}</h3>
+                  <p>{b}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ---------- ROADMAP ---------- */}
+      <section className="section-tight" id="progress">
+        <div className="container">
+          <div className="section-head">
+            <span className="eyebrow" data-reveal>Progress</span>
+            <h2 className="h-1" data-reveal>
+              Built, tested, and <span className="serif mint-text">moving fast.</span>
+            </h2>
+          </div>
+          <div className="roadmap">
+            {roadmap.map((r, i) => (
+              <div className="rm glass" data-spot data-reveal style={{ ["--d" as string]: i }} key={r.t}>
+                <span className={`rm-status ${r.s}`} style={{ color: r.s === "done" ? "var(--mint-700)" : "var(--pink-700)" }}>
+                  <i /> {r.label}
+                  {"when" in r && r.when && <span className="muted" style={{ fontWeight: 500 }}>· {r.when}</span>}
+                </span>
+                <h4>{r.t}</h4>
+                <p>{r.b}</p>
+                {"when" in r && !r.when && <Note>target date</Note>}
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ---------- QUOTE ---------- */}
+      {(quote || SHOW_PLACEHOLDERS) && (
+        <section className="section-tight">
+          <div className="container">
+            <div className="quote glass" data-spot data-reveal>
+              <Quote size={36} />
+              <blockquote>
+                “{quote?.quote ?? "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore."}”
+              </blockquote>
+              {!quote && <Note>quote from a clinician, beta tester or caregiver</Note>}
+              <div className="person">
+                <span className="avatar" />
+                <div>
+                  <b>{quote?.name ?? "Lorem Ipsum"}</b>
+                  <div className="muted">{quote?.role ?? "Dolor, Sit Amet Clinic"}</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* ---------- TEAM ---------- */}
+      {team.length > 0 && (
+        <section className="section-tight" id="team">
+          <div className="container">
+            <div className="section-head">
+              <span className="eyebrow" data-reveal>Team</span>
+              <h2 className="h-1" data-reveal>
+                The people behind <span className="serif mint-text">Remedy.</span>
+              </h2>
+              {!site.team.length && <Note>founders: name, role, one-line bio, photo in /public — set team in lib/site.ts</Note>}
+            </div>
+            <div className="team">
+              {team.map((m, i) => (
+                <div className="member glass" data-spot data-reveal style={{ ["--d" as string]: i }} key={m.name}>
+                  <span className="photo">
+                    {m.photo && <Image src={m.photo} alt={m.name} width={64} height={64} />}
+                  </span>
+                  <div>
+                    <h4>{m.name}</h4>
+                    <div className="role">{m.role}</div>
+                  </div>
+                  <p>{m.bio}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* ---------- CLINIC CTA ---------- */}
+      <section className="section-tight">
+        <div className="container">
+          <div className="glass" data-spot data-reveal style={{ padding: "44px 44px", display: "flex", gap: 24, alignItems: "center", justifyContent: "space-between", flexWrap: "wrap" }}>
+            <div style={{ maxWidth: 620 }}>
+              <span className="eyebrow"><Building size={14} /> For medical centers</span>
+              <h2 className="h-2" style={{ marginTop: 16 }}>Give every surgical patient a plan they’ll actually follow.</h2>
+              <p className="muted" style={{ margin: "10px 0 0" }}>Works with Epic MyChart via SMART on FHIR. We’re partnering with a small group of clinics for our pilot.</p>
+            </div>
+            <Link href="/clinics" className="btn btn-primary" data-magnetic>
+              Partner with us <Arrow />
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* ---------- FAQ ---------- */}
+      <section className="section" id="faq">
+        <div className="container">
+          <div className="section-head center">
+            <span className="eyebrow" data-reveal>FAQ</span>
+            <h2 className="h-1" data-reveal>Questions, answered.</h2>
+          </div>
+          <FAQ items={faqs} />
+        </div>
+      </section>
+
+      {/* ---------- WAITLIST ---------- */}
+      <section className="section" id="waitlist" style={{ paddingTop: 20 }}>
+        <div className="container">
+          <div className="cta glass" data-spot data-reveal>
+            <Capsule className="cta-capsule" interactive={false} />
+            <span className="eyebrow">
+              <span className="dot" /> {site.launch ? `Launching ${site.launch}` : "Coming soon"}
+              {!site.launch && <Note>launch month / season</Note>}
+            </span>
+            <h2 className="h-1" style={{ maxWidth: 760 }}>
+              Be first to try <span className="serif mint-text">Remedy.</span>
+            </h2>
+            <p className="lead">Join the waitlist for early access and TestFlight invites. No spam — just one email when it’s ready.</p>
+            <Waitlist />
+          </div>
+        </div>
+      </section>
+    </>
+  );
+}
