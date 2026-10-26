@@ -29,6 +29,7 @@ export default function Footer() {
             <ul>
               <li><Link href="/#how">How it works</Link></li>
               <li><Link href="/#app">The app</Link></li>
+              <li><Link href="/screens">Every screen</Link></li>
               <li><Link href="/#safety">Safety</Link></li>
               <li><Link href="/#faq">FAQ</Link></li>
             </ul>
@@ -37,8 +38,7 @@ export default function Footer() {
             <h6>Partners</h6>
             <ul>
               <li><Link href="/clinics">For clinics</Link></li>
-              <li><Link href="/clinics#pilot">Pilot program</Link></li>
-              <li><Link href="/clinics#contact">Book a demo</Link></li>
+              <li><Link href="/clinics#contact">Contact</Link></li>
             </ul>
           </div>
           <div>

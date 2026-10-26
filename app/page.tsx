@@ -1,5 +1,4 @@
 import Link from "next/link";
-import Image from "next/image";
 import HeroVisual from "@/components/HeroVisual";
 import VideoSection from "@/components/VideoSection";
 import HowItWorks from "@/components/HowItWorks";
@@ -7,11 +6,14 @@ import Showcase from "@/components/Showcase";
 import EvidenceDemo from "@/components/EvidenceDemo";
 import Waitlist from "@/components/Waitlist";
 import FAQ from "@/components/FAQ";
+import Quotes from "@/components/Quotes";
 import Capsule from "@/components/Capsule";
+import Phone from "@/components/Phone";
+import { media } from "@/lib/media";
 import Ph, { Note } from "@/components/Ph";
 import { site, SHOW_PLACEHOLDERS, type Person } from "@/lib/site";
 import {
-  Arrow, Check, Shield, Doc, Calendar, Lock, Users, Heart, Building, Alert, Pill, Quote, Scan, Bell, Chat, Phone as PhoneIco, Sun, Spark,
+  Arrow, Check, Shield, Doc, Calendar, Lock, Users, Heart, Building, Alert, Pill, Scan, Bell, Chat, Phone as PhoneIco, Sun, Spark,
 } from "@/components/Icons";
 
 const tech = [
@@ -49,7 +51,7 @@ const rules = [
 ];
 
 const everywhere = [
-  { Icon: Bell, t: "Actionable reminders", b: "A notification at every dose time with “I took it” and “Snooze 10 minutes” — no need to open the app." },
+  { Icon: Bell, t: "Actionable reminders", b: "A notification at every dose time with “I took it” and “Remind me in 10 min” — no need to open the app." },
   { Icon: Chat, t: "Siri & Shortcuts", b: "“Hey Siri, what do I take in Remedy?” reads out what’s due. “I took my medicine” logs it." },
   { Icon: PhoneIco, t: "Home & Lock Screen widgets", b: "Today shows what’s due now and how many doses are taken. Journey counts down to surgery and through recovery." },
   { Icon: Calendar, t: "Calendar & Reminders", b: "Add visits to Calendar with alerts 1 day and 2 hours before. Visit, stop-day and to-do reminders, and to-dos in the Reminders app." },
@@ -73,10 +75,11 @@ const placeholderStats = [
   { value: "$00B", label: "Lorem ipsum dolor sit amet ut labore et dolore magna.", source: "cost of avoidable readmissions or cancelled surgeries + source" },
 ];
 
+const placeholderQuotes = [{ quote: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore.", by: "Lorem Ipsum" }];
+
 const placeholderTeam = [
-  { name: "Lorem Ipsum", role: "Co-founder", bio: "Lorem ipsum dolor sit amet, consectetur adipiscing elit sed do." },
-  { name: "Dolor Sit", role: "Co-founder", bio: "Lorem ipsum dolor sit amet, consectetur adipiscing elit sed do." },
-  { name: "Amet Elit", role: "Co-founder", bio: "Lorem ipsum dolor sit amet, consectetur adipiscing elit sed do." },
+  { name: "Lorem Ipsum", role: "Co-founder" },
+  { name: "Dolor Sit", role: "Co-founder" },
 ];
 
 const faqs = [
@@ -111,7 +114,7 @@ const faqs = [
 export default function Home() {
   const stats = site.stats.length ? site.stats : SHOW_PLACEHOLDERS ? placeholderStats : [];
   const team: Person[] = site.team.length ? site.team : SHOW_PLACEHOLDERS ? placeholderTeam : [];
-  const quote = site.testimonial;
+  const quotes = site.testimonials.length ? site.testimonials : SHOW_PLACEHOLDERS ? placeholderQuotes : [];
 
   return (
     <>
@@ -135,9 +138,11 @@ export default function Home() {
               <Link href="#waitlist" className="btn btn-primary" data-magnetic>
                 Join the waitlist <Arrow />
               </Link>
-              <Link href="#demo" className="btn btn-glass" data-magnetic>
-                Watch the demo
-              </Link>
+              {site.demoVideo.youtubeId && (
+                <Link href="#demo" className="btn btn-glass" data-magnetic>
+                  Watch the demo
+                </Link>
+              )}
             </div>
             <div className="hero-meta" data-reveal style={{ ["--d" as string]: 4 }}>
               <span className="check"><Check /> Every item from your own papers or record</span>
@@ -211,6 +216,7 @@ export default function Home() {
       </section>
 
       {/* ---------- DEMO VIDEO ---------- */}
+      {(site.demoVideo.youtubeId || SHOW_PLACEHOLDERS) && (
       <section className="section" id="demo" style={{ paddingTop: 40 }}>
         <div className="container">
           <div className="section-head center">
@@ -222,6 +228,7 @@ export default function Home() {
           <VideoSection />
         </div>
       </section>
+      )}
 
       {/* ---------- HOW IT WORKS ---------- */}
       <section className="section" id="how">
@@ -270,8 +277,7 @@ export default function Home() {
               Designed to be <span className="serif mint-text">calm and clear.</span>
             </h2>
             <p className="lead" data-reveal>
-              Two looks — Classic and Simple — built on the same plan. Pick a screen, then tap around the phone: it’s
-              interactive.
+              Two looks — Classic and Simple — built on the same plan. Pick a screen to see it in the real app.
             </p>
           </div>
           <Showcase />
@@ -349,6 +355,11 @@ export default function Home() {
               There when you need it — <span className="serif mint-text">even when you don’t open it.</span>
             </h2>
           </div>
+          <div className="widget-shots" data-reveal>
+            <Phone media={media.lockScreen} />
+            <Phone media={media.homeWidgets} />
+            <Phone media={media.homeWidgetsSmall} />
+          </div>
           <div className="grid-3">
             {everywhere.map(({ Icon, t, b }, i) => (
               <div className="feature glass" data-spot data-reveal style={{ ["--d" as string]: i % 3 }} key={t}>
@@ -398,11 +409,11 @@ export default function Home() {
           <div className="section-head">
             <span className="eyebrow" data-reveal>Progress</span>
             <h2 className="h-1" data-reveal>
-              Built, tested, and <span className="serif mint-text">moving fast.</span>
+              Built and <span className="serif mint-text">tested.</span>
             </h2>
           </div>
           <div className="roadmap">
-            {roadmap.map((r, i) => (
+            {roadmap.filter((r) => r.s === "done" || ("when" in r && r.when) || SHOW_PLACEHOLDERS).map((r, i) => (
               <div className="rm glass" data-spot data-reveal style={{ ["--d" as string]: i }} key={r.t}>
                 <span className={`rm-status ${r.s}`} style={{ color: r.s === "done" ? "var(--mint-700)" : "var(--pink-700)" }}>
                   <i /> {r.label}
@@ -417,24 +428,18 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ---------- QUOTE ---------- */}
-      {(quote || SHOW_PLACEHOLDERS) && (
-        <section className="section-tight">
+      {/* ---------- QUOTES ---------- */}
+      {quotes.length > 0 && (
+        <section className="section-tight" id="quotes">
           <div className="container">
-            <div className="quote glass" data-spot data-reveal>
-              <Quote size={36} />
-              <blockquote>
-                “{quote?.quote ?? "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore."}”
-              </blockquote>
-              {!quote && <Note>quote from a clinician, beta tester or caregiver</Note>}
-              <div className="person">
-                <span className="avatar" />
-                <div>
-                  <b>{quote?.name ?? "Lorem Ipsum"}</b>
-                  <div className="muted">{quote?.role ?? "Dolor, Sit Amet Clinic"}</div>
-                </div>
-              </div>
+            <div className="section-head center">
+              <span className="eyebrow" data-reveal>From clinicians</span>
+              <h2 className="h-1" data-reveal>
+                What care teams <span className="serif mint-text">are saying.</span>
+              </h2>
+              {!site.testimonials.length && <Note>quotes from clinicians, beta testers or caregivers</Note>}
             </div>
+            <Quotes quotes={quotes} />
           </div>
         </section>
       )}
@@ -443,24 +448,18 @@ export default function Home() {
       {team.length > 0 && (
         <section className="section-tight" id="team">
           <div className="container">
-            <div className="section-head">
+            <div className="section-head center">
               <span className="eyebrow" data-reveal>Team</span>
               <h2 className="h-1" data-reveal>
                 The people behind <span className="serif mint-text">Remedy.</span>
               </h2>
-              {!site.team.length && <Note>founders: name, role, one-line bio, photo in /public — set team in lib/site.ts</Note>}
+              {!site.team.length && <Note>founders: name and role — set team in lib/site.ts</Note>}
             </div>
             <div className="team">
               {team.map((m, i) => (
                 <div className="member glass" data-spot data-reveal style={{ ["--d" as string]: i }} key={m.name}>
-                  <span className="photo">
-                    {m.photo && <Image src={m.photo} alt={m.name} width={64} height={64} />}
-                  </span>
-                  <div>
-                    <h4>{m.name}</h4>
-                    <div className="role">{m.role}</div>
-                  </div>
-                  <p>{m.bio}</p>
+                  <h4>{m.name}</h4>
+                  <div className="role">{m.role}</div>
                 </div>
               ))}
             </div>
@@ -475,10 +474,10 @@ export default function Home() {
             <div style={{ maxWidth: 620 }}>
               <span className="eyebrow"><Building size={14} /> For medical centers</span>
               <h2 className="h-2" style={{ marginTop: 16 }}>Give every surgical patient a plan they’ll actually follow.</h2>
-              <p className="muted" style={{ margin: "10px 0 0" }}>Patients can import from Epic MyChart via SMART on FHIR, tested on Epic’s developer sandbox. We’re partnering with a small group of clinics for our pilot.</p>
+              <p className="muted" style={{ margin: "10px 0 0" }}>Patients can import from Epic MyChart via SMART on FHIR, tested on Epic’s developer sandbox.</p>
             </div>
             <Link href="/clinics" className="btn btn-primary" data-magnetic>
-              Partner with us <Arrow />
+              For clinics <Arrow />
             </Link>
           </div>
         </div>
@@ -507,7 +506,7 @@ export default function Home() {
             <h2 className="h-1" style={{ maxWidth: 760 }}>
               Be first to try <span className="serif mint-text">Remedy.</span>
             </h2>
-            <p className="lead">Join the waitlist for early access and TestFlight invites. No spam — just one email when it’s ready.</p>
+            <p className="lead">Join the waitlist and we’ll let you know when Remedy is ready.</p>
             <Waitlist />
           </div>
         </div>

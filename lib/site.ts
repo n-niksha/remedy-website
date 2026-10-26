@@ -3,16 +3,16 @@
  *  REMEDY SITE CONTENT — fill in everything marked `null` here.
  * ─────────────────────────────────────────────────────────────
  *
- * Anything left as `null` (or an empty list) is a placeholder:
- *  - by default it shows lorem text with a pink "(what to put here)" note
- *  - set NEXT_PUBLIC_HIDE_PLACEHOLDERS=true (e.g. in Vercel, or `.env.local`)
- *    and every unfilled section is hidden instead, so the site looks finished.
+ * Anything left as `null` (or an empty list) is hidden on the site.
+ * To see where each missing piece goes, set NEXT_PUBLIC_SHOW_PLACEHOLDERS=true
+ * (e.g. in `.env.local`): unfilled spots then show lorem text with a pink note.
  */
 
-export const SHOW_PLACEHOLDERS = process.env.NEXT_PUBLIC_HIDE_PLACEHOLDERS !== "true";
+export const SHOW_PLACEHOLDERS = process.env.NEXT_PUBLIC_SHOW_PLACEHOLDERS === "true";
 
 export type Stat = { value: string; label: string; source: string };
-export type Person = { name: string; role: string; bio: string; photo?: string; linkedin?: string };
+export type Testimonial = { quote: string; by: string };
+export type Person = { name: string; role: string };
 
 export const site = {
   /** Public contact email, e.g. "hello@remedyhealth.app" */
@@ -27,20 +27,56 @@ export const site = {
   /** Launch timing shown on the waitlist card, e.g. "Spring 2027" */
   launch: null as string | null,
 
-  /** Demo video: drop the file in /public and set e.g. "/demo.mp4" (poster optional) */
-  demoVideo: { src: null as string | null, poster: null as string | null, length: "1:30" },
+  /** Demo video on YouTube (the id from the watch?v= link). Poster is a local copy of its thumbnail. */
+  demoVideo: {
+    youtubeId: "TjHznx987hQ" as string | null,
+    poster: "/app/demo-poster.jpg" as string | null,
+    title: "Remedy: Recovery made simple.",
+  },
 
   /** Three problem stats with sources, e.g. { value: "40%", label: "of patients…", source: "JAMA 2023" } */
-  stats: [] as Stat[],
+  stats: [
+    {
+      value: "42%",
+      label: "of surgical patients didn’t follow their pre-op medication advice — most often because they forgot or misunderstood it.",
+      source: "Tse et al., Healthcare, 2025",
+    },
+    {
+      value: "78%",
+      label: "of patients leaving the ER didn’t fully understand their discharge instructions — and most didn’t realise it.",
+      source: "Engel et al., Annals of Emergency Medicine, 2009",
+    },
+    {
+      value: "1 in 4",
+      label: "older adults is back in hospital within six months of major surgery — 1 in 8 within a month.",
+      source: "Wang et al., JAMA Network Open, 2024",
+    },
+  ] as Stat[],
 
   /** Pilot / partner clinic names (shown as a logo strip). Leave empty to hide. */
   partners: [] as string[],
 
-  /** One testimonial from a clinician, beta tester or caregiver */
-  testimonial: null as { quote: string; name: string; role: string } | null,
+  /** Quotes from clinicians, shown as a carousel on the home page. `by` is the attribution line. */
+  testimonials: [
+    {
+      quote: "My patients struggle to recall what they should do with their medications; this will be so helpful!",
+      by: "HSS physician",
+    },
+    {
+      quote: "I often have patients who sit in my office and manually enter the dates into their calendar — this does it for them! Brilliant!!",
+      by: "Anonymous doctor",
+    },
+    {
+      quote: "The safety of our surgeries and anesthesia often relies on patients timing their medications correctly. This is a fantastic tool!",
+      by: "Perioperative medical team",
+    },
+  ] as Testimonial[],
 
   /** Founding team, shown on the home page */
-  team: [] as Person[],
+  team: [
+    { name: "Dorron Hoffman", role: "Co-founder" },
+    { name: "Nikhil Shah", role: "Co-founder" },
+  ] as Person[],
 
   /** Roadmap dates (status items themselves are real; only dates are placeholders) */
   roadmap: {

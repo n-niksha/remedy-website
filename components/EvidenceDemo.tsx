@@ -3,21 +3,23 @@
 import { useState } from "react";
 import { Check, Alert } from "./Icons";
 
+/* Page 1 of the app's sample patient papers, exactly as shown in "What the AI sees". */
 const lines = [
-  "1. Stop ibuprofen (Motrin, Advil) 4 days before surgery.",
-  "2. Continue metoprolol 25mg twice daily, including the morning of surgery.",
-  "3. Take an extra-strength pain reliever as needed.",
-  "4. Bring your inhalers to the hospital.",
-  "5. Follow up with Dr. Rivera in 10–14 days.",
+  "1. Seven (7) days before your surgery, do not take: Fish Oil · Multivitamin",
+  "2. Four (4) days before your surgery, do not take (these cause blood thinning): Meloxicam (Mobic) · Advil or Motrin (ibuprofen)",
+  "3. The day before surgery and the morning of surgery, do not take: Metformin",
+  "4. The morning of surgery, do not take: Lisinopril",
+  "5. OK to take - keep taking these every day, including the morning of surgery: Baby aspirin 81 mg · Atorvastatin · Omeprazole",
+  "6. Tylenol (acetaminophen) is OK to take before surgery if you need something for pain.",
 ];
 
 type Status = "pending" | "approved" | "rejected";
 
-const drafts = [
-  { line: 0, kind: "Stop taking", title: "Ibuprofen (Motrin, Advil)", reason: "From Day −4 · “4” is written on the page, so the day count is kept.", tag: "Medicine" },
-  { line: 1, kind: "Take every day", title: "Metoprolol 25 mg", reason: "Strength and “twice daily” found in the quote.", tag: "Medicine" },
-  { line: 3, kind: "To-do", title: "Bring your inhalers to the hospital", reason: "Before surgery · quote matches page 1.", tag: "To-do" },
-  { line: 4, kind: "To-do", title: "Call to book your follow-up visit", reason: "No full date with a 4-digit year — so it becomes a call, never a guessed date.", tag: "Check this", flag: true },
+const drafts: { line: number; kind: string; title: string; reason: string; tag: string; flag?: boolean }[] = [
+  { line: 0, kind: "Stop taking", title: "Fish Oil (Omega-3)", reason: "When: from 7 days before surgery.", tag: "Medicine" },
+  { line: 1, kind: "Stop taking", title: "Meloxicam (Mobic)", reason: "When: from 4 days before surgery. Why: these cause blood thinning.", tag: "Medicine" },
+  { line: 2, kind: "Stop taking", title: "Metformin", reason: "When: the day before surgery and the morning of surgery.", tag: "Medicine" },
+  { line: 4, kind: "OK to take", title: "Baby aspirin 81 mg", reason: "Keep taking every day, including the morning of surgery.", tag: "Medicine" },
 ];
 
 export default function EvidenceDemo() {
@@ -36,9 +38,9 @@ export default function EvidenceDemo() {
   return (
     <div className="evidence glass" data-reveal>
       <div className="ev-doc">
-        <h5>Pre-Operative Instructions</h5>
+        <h5>Directions for Your Medications Preoperatively</h5>
         <div className="sub">
-          <span>Patient: ██████ · MRN: ██████</span>
+          <span>After Visit Summary · <span className="ev-hidden">hidden</span> MRN: <span className="ev-hidden">hidden</span></span>
           <span>Page 1</span>
         </div>
         {lines.map((l, i) => {
@@ -50,11 +52,8 @@ export default function EvidenceDemo() {
             </div>
           );
         })}
-        <div className="ev-line" style={{ marginTop: 14, fontFamily: "var(--font-sans)", fontSize: 12.5, color: "var(--pink-700)", background: "var(--pink-100)", display: "flex", gap: 8, alignItems: "flex-start" }}>
-          <Alert size={13} /> Line 3 names no medicine or dose, so no medicine or dose was made up for it.
-        </div>
         <p className="muted" style={{ fontFamily: "var(--font-sans)", fontSize: 12, marginTop: 14, marginBottom: 0 }}>
-          Sample document for illustration.
+          From the app’s fictional sample patient. Names and record numbers are hidden on the phone before anything is sent.
         </p>
       </div>
 

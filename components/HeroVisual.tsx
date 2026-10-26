@@ -3,6 +3,7 @@
 import { useEffect, useRef } from "react";
 import Capsule from "./Capsule";
 import Phone from "./Phone";
+import { media } from "@/lib/media";
 import { Bell, Shield, Check } from "./Icons";
 
 export default function HeroVisual() {
@@ -25,7 +26,7 @@ export default function HeroVisual() {
     <div className="hero-visual" ref={ref}>
       <Capsule className="hero-capsule" />
       <div className="hero-phone">
-        <Phone screen="today" width={290} />
+        <Phone media={media.logDose} width={290} priority />
       </div>
 
       <div className="float-chip glass chip-a">
@@ -33,8 +34,8 @@ export default function HeroVisual() {
           <Bell size={18} />
         </span>
         <span>
-          <b>Time for Cephalexin</b>
-          <small>I took it · Snooze 10 min</small>
+          <b>Time for your medicine</b>
+          <small>I took it · Remind me in 10 min</small>
         </span>
       </div>
 

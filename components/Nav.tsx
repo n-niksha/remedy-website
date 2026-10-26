@@ -8,6 +8,7 @@ import { useEffect, useState } from "react";
 const links = [
   { href: "/#how", label: "How it works" },
   { href: "/#app", label: "The app" },
+  { href: "/screens", label: "Every screen" },
   { href: "/#safety", label: "Safety" },
   { href: "/clinics", label: "For clinics" },
   { href: "/#faq", label: "FAQ" },
@@ -74,7 +75,7 @@ export default function Nav() {
 
         <div className="nav-cta">
           <Link href="/clinics#contact" className="btn btn-glass btn-sm">
-            Book a demo
+            Contact
           </Link>
           <Link href="/#waitlist" className="btn btn-primary btn-sm" data-magnetic>
             Join waitlist
@@ -98,7 +99,7 @@ export default function Nav() {
           </Link>
         ))}
         <Link href="/clinics#contact" onClick={() => setOpen(false)}>
-          Book a demo
+          Contact
         </Link>
         <Link href="/#waitlist" className="btn btn-primary" onClick={() => setOpen(false)}>
           Join waitlist

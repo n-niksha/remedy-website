@@ -1,8 +1,9 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { AppIcon } from "./Phone";
-import { Check, Pill, Calendar, Alert, Scan, Doc, Building, Heart } from "./Icons";
+import Phone from "./Phone";
+import { media, type Media } from "@/lib/media";
+import { Check } from "./Icons";
 
 const steps = [
   {
@@ -23,130 +24,31 @@ const steps = [
   },
   {
     title: "Follow a simple daily plan",
-    body: "Today shows what to take and what to stop. Reminders at every dose time have “I took it” right on the notification, plus Siri, widgets and visit alerts.",
+    body: "Today shows what to take and what to stop. Reminders at every dose time have “I took it” and “Remind me in 10 min” right on the notification, plus Siri, widgets and visit alerts.",
   },
 ];
 
-const DURATION = 5200;
+/** `ms` is how long each step stays up — at least one full play of its clip. */
+const stages: { m: Media; ms: number; pills: { t: string; c: string }[] }[] = [
+  { m: media.importPapers, ms: 5200, pills: [{ t: "Camera · Photos · PDF", c: "pill-grey" }, { t: "MyChart · Health Records", c: "pill-grey" }] },
+  { m: media.aiSees, ms: 5200, pills: [{ t: "11 personal details hidden", c: "pill-mint" }, { t: "This is “What the AI sees”", c: "pill-grey" }] },
+  { m: media.reading, ms: 5200, pills: [{ t: "10 medicines · 3 rules · 4 to-dos", c: "pill-mint" }, { t: "Every item checked against your papers", c: "pill-grey" }] },
+  { m: media.review, ms: 7400, pills: [{ t: "Looks right", c: "pill-mint" }, { t: "Edit", c: "pill-grey" }, { t: "Not on my papers", c: "pill-pink" }] },
+  { m: media.doseBanner, ms: 9000, pills: [{ t: "I took it", c: "pill-mint" }, { t: "Remind me in 10 min", c: "pill-grey" }] },
+];
 
 function Stage({ i }: { i: number }) {
-  if (i === 0)
-    return (
-      <div style={{ display: "grid", gap: 22, justifyItems: "center" }}>
-        <div style={{ position: "relative" }}>
-          <div className="doc" style={{ height: 230 }}>
-            <div className="scan-beam" />
-            <div className="doc-title">PRE-OPERATIVE INSTRUCTIONS</div>
-            <div style={{ color: "var(--muted)", marginBottom: 10 }}>Page 1 of 3</div>
-            {Array.from({ length: 11 }, (_, k) => (
-              <div key={k} className="doc-line" style={{ width: `${55 + ((k * 41) % 45)}%` }} />
-            ))}
-          </div>
-          <span className="corner tl" />
-          <span className="corner tr" />
-          <span className="corner bl" />
-          <span className="corner br" />
-        </div>
-        <div style={{ display: "flex", gap: 8, flexWrap: "wrap", justifyContent: "center" }}>
-          {[
-            { t: "Camera", I: Scan },
-            { t: "Photos", I: Doc },
-            { t: "PDF", I: Doc },
-            { t: "MyChart", I: Building },
-            { t: "Health Records", I: Heart },
-          ].map(({ t, I }, k) => (
-            <span key={t} className="pill pill-grey glass" style={{ animation: `notifIn .5s ${k * 90}ms both cubic-bezier(.22,1,.36,1)`, borderRadius: 999 }}>
-              <I size={13} /> {t}
-            </span>
-          ))}
-        </div>
-      </div>
-    );
-  if (i === 1)
-    return (
-      <div style={{ display: "grid", gap: 18, justifyItems: "center", width: "100%" }}>
-        <div className="doc doc-text" style={{ width: "100%", maxWidth: 380, fontSize: 11.5 }}>
-          <div>Patient: <span className="redact" style={{ animationDelay: "300ms" }}>Margaret J. Collins</span></div>
-          <div>MRN: <span className="redact" style={{ animationDelay: "500ms" }}>0048213977</span> &nbsp;DOB: <span className="redact" style={{ animationDelay: "700ms" }}>03/14/1951</span></div>
-          <div>Address: <span className="redact" style={{ animationDelay: "900ms" }}>12 Oak Ln, Springfield</span></div>
-          <div style={{ marginTop: 8 }}>Stop ibuprofen (Motrin, Advil) 4 days before surgery.</div>
-          <div>Aspirin 325mg: hold until cleared by surgeon.</div>
-          <div>Questions? Call our office (555) 010-2200.</div>
-        </div>
-        <div style={{ display: "flex", gap: 8, flexWrap: "wrap", justifyContent: "center" }}>
-          <span className="pill pill-mint"><Check size={12} /> 4 personal details removed</span>
-          <span className="pill pill-grey">Doses &amp; office phone kept</span>
-        </div>
-        <span className="muted" style={{ fontSize: 13 }}>This is “What the AI sees”.</span>
-      </div>
-    );
-  if (i === 2) {
-    const words: [string, string?][] = [
-      ["Stop"], ["ibuprofen", "med"], ["(Motrin, Advil)", "med"], ["4 days", "time"], ["before"], ["surgery.", "time"],
-      ["Take"], ["cephalexin", "med"], ["500mg", "med"], ["3 times a day", "time"],
-      ["No"], ["driving"], ["for"], ["2 weeks.", "time"], ["Follow"], ["up"], ["in"], ["10–14 days.", "time"],
-    ];
-    return (
-      <div style={{ display: "grid", gap: 22, justifyItems: "center" }}>
-        <span className="pill pill-grey">Reading 3 pages · answers tied to the paper’s exact words</span>
-        <div className="ocr-words">
-          {words.map(([w, c], k) => (
-            <span key={k} className={`ocr-word ${c ?? ""}`} style={{ animationDelay: `${k * 90}ms` }}>
-              {w}
-            </span>
-          ))}
-        </div>
-        <div style={{ display: "flex", gap: 8, flexWrap: "wrap", justifyContent: "center" }}>
-          <span className="pill pill-mint">Medicine</span>
-          <span className="pill pill-pink">Timing · Day −4</span>
-          <span className="pill pill-grey">Visit date not written → “Call to book”</span>
-        </div>
-      </div>
-    );
-  }
-  if (i === 3)
-    return (
-      <div style={{ width: "100%", display: "grid", justifyItems: "center" }}>
-        {[
-          { n: "Stop taking: Ibuprofen (Motrin, Advil)", s: "“…4 days before surgery.” · p.1", st: "Looks right", c: "pill-mint" },
-          { n: "Take every day: Cephalexin 500 mg", s: "“…3 times a day until finished.” · p.2", st: "Looks right", c: "pill-mint" },
-          { n: "Call to book your post-op visit", s: "No full date on your papers", st: "Needs you", c: "pill-pink" },
-        ].map((d, k) => (
-          <div key={k} className="draft-card glass" style={{ animation: `notifIn .6s ${k * 150}ms both cubic-bezier(.22,1,.36,1)` }}>
-            <div className="meta">
-              <b>{d.n}</b>
-              <small>{d.s}</small>
-            </div>
-            <span className={`pill ${d.c}`}>{d.st === "Looks right" && <Check size={12} />} {d.st}</span>
-          </div>
+  const { m, pills } = stages[i];
+  return (
+    <div style={{ display: "grid", gap: 18, justifyItems: "center" }}>
+      <Phone media={m} width={210} />
+      <div style={{ display: "flex", gap: 8, flexWrap: "wrap", justifyContent: "center" }}>
+        {pills.map(({ t, c }, k) => (
+          <span key={t} className={`pill ${c}`} style={{ animation: `notifIn .5s ${k * 90}ms both cubic-bezier(.22,1,.36,1)` }}>
+            {c === "pill-mint" && <Check size={12} />} {t}
+          </span>
         ))}
       </div>
-    );
-  return (
-    <div style={{ width: "100%", display: "grid", justifyItems: "center" }}>
-      {[
-        { t: "Time for Cephalexin", b: "500 mg · 1 capsule with food", w: "now", I: Pill, actions: true },
-        { t: "Stop taking ibuprofen today", b: "4 days before surgery · put it away", w: "8:00 AM", I: Alert },
-        { t: "Post-op visit in 2 hours", b: "10:30 AM · bring your medicine list", w: "8:30 AM", I: Calendar },
-      ].map((n, k) => (
-        <div key={k} className="notif glass" style={{ animationDelay: `${k * 260}ms` }}>
-          <span className="app-ico"><AppIcon /></span>
-          <div className="n-body">
-            <div className="n-head">
-              <span>REMEDY</span>
-              <span>{n.w}</span>
-            </div>
-            <b>{n.t}</b>
-            <div className="muted">{n.b}</div>
-            {n.actions && (
-              <div style={{ display: "flex", gap: 6, marginTop: 8 }}>
-                <span className="ev-btn approve on" style={{ display: "inline-flex", alignItems: "center" }}>I took it</span>
-                <span className="ev-btn" style={{ display: "inline-flex", alignItems: "center" }}>Snooze 10 min</span>
-              </div>
-            )}
-          </div>
-        </div>
-      ))}
     </div>
   );
 }
@@ -157,7 +59,7 @@ export default function HowItWorks() {
 
   useEffect(() => {
     if (paused) return;
-    const t = setTimeout(() => setActive((a) => (a + 1) % steps.length), DURATION);
+    const t = setTimeout(() => setActive((a) => (a + 1) % steps.length), stages[active].ms);
     return () => clearTimeout(t);
   }, [active, paused]);
 
@@ -166,7 +68,7 @@ export default function HowItWorks() {
       className={`how ${paused ? "paused" : ""}`}
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
-      style={{ ["--dur" as string]: `${DURATION}ms` }}
+      style={{ ["--dur" as string]: `${stages[active].ms}ms` }}
     >
       <div className="how-steps" role="tablist" aria-label="How Remedy works">
         {steps.map((s, i) => (

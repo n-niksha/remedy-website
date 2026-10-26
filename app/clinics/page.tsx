@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import ClinicForm from "@/components/ClinicForm";
 import Phone from "@/components/Phone";
+import { media } from "@/lib/media";
 import Ph, { Note } from "@/components/Ph";
 import { site, SHOW_PLACEHOLDERS } from "@/lib/site";
 import { Arrow, Check, Shield, Chart, Users, Doc, Lock, Building, Heart, Phone as PhoneIco } from "@/components/Icons";
@@ -55,10 +56,7 @@ export default function Clinics() {
           </p>
           <div className="hero-actions" data-reveal style={{ ["--d" as string]: 3, justifyContent: "center", marginTop: 32 }}>
             <Link href="#contact" className="btn btn-primary" data-magnetic>
-              Book a demo <Arrow />
-            </Link>
-            <Link href="#pilot" className="btn btn-glass" data-magnetic>
-              See the pilot program
+              Get in touch <Arrow />
             </Link>
           </div>
         </div>
@@ -86,7 +84,7 @@ export default function Clinics() {
               </ul>
             </div>
             <div data-reveal style={{ display: "flex", justifyContent: "center" }}>
-              <Phone screen="detail" width={280} />
+              <Phone media={media.medicineDetail} width={280} />
             </div>
           </div>
         </div>
@@ -143,6 +141,7 @@ export default function Clinics() {
         </div>
       </section>
 
+      {(site.clinics.pilotTerms || SHOW_PLACEHOLDERS) && (
       <section className="section" id="pilot">
         <div className="container">
           <div className="section-head">
@@ -169,6 +168,7 @@ export default function Clinics() {
           </div>
         </div>
       </section>
+      )}
 
       <section className="section-tight">
         <div className="container grid-2">
@@ -213,7 +213,7 @@ export default function Clinics() {
               Let’s talk about <span className="serif mint-text">your patients.</span>
             </h2>
             <p className="lead" style={{ marginTop: 18 }}>
-              Book a 30-minute walkthrough of Remedy with the founding team.
+              Tell us about your clinic and we’ll get back to you.
             </p>
             {(site.clinics.contact || SHOW_PLACEHOLDERS) && (
               <div className="person" style={{ marginTop: 32 }}>
