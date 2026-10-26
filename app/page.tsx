@@ -4,14 +4,12 @@ import VideoSection from "@/components/VideoSection";
 import HowItWorks from "@/components/HowItWorks";
 import Showcase from "@/components/Showcase";
 import EvidenceDemo from "@/components/EvidenceDemo";
-import Waitlist from "@/components/Waitlist";
 import FAQ from "@/components/FAQ";
 import Quotes from "@/components/Quotes";
 import Capsule from "@/components/Capsule";
 import Phone from "@/components/Phone";
 import { media } from "@/lib/media";
-import Ph, { Note } from "@/components/Ph";
-import { site, SHOW_PLACEHOLDERS, type Person } from "@/lib/site";
+import { site } from "@/lib/site";
 import {
   Arrow, Check, Shield, Doc, Calendar, Lock, Users, Heart, Building, Alert, Pill, Scan, Bell, Chat, Phone as PhoneIco, Sun, Spark,
 } from "@/components/Icons";
@@ -59,27 +57,12 @@ const everywhere = [
   { Icon: Users, t: "Accessible by default", b: "Dynamic Type, VoiceOver, Reduce Motion, “Read to me”, and plain words instead of medical shorthand." },
   { Icon: Doc, t: "Share & print", b: "An overview, a single day, your medicines or the whole journey as a PDF — for the fridge or a family member." },
   { Icon: Alert, t: "Help on every screen", b: "A big 911 button, the warning signs to watch for, and tap-to-call for your care team and pharmacy." },
-  { Icon: Sun, t: "Four themes, Liquid Glass", b: "Remedy, Light, Dark or Sunrise, with the iOS 26 Liquid Glass design and a “next up” bar above the tabs." },
+  { Icon: Sun, t: "Four themes, Liquid Glass", b: "Remedy, Light, Dark or Sunrise, with Apple’s Liquid Glass design and a “next up” bar above the tabs." },
 ];
 
 const roadmap = [
   { s: "done", label: "Built", t: "iOS app", b: "Scanning, redaction, AI extraction with checks, Confirm, Today, Plan, Ask, reminders, Siri and widgets." },
   { s: "done", label: "Built", t: "Hospital import", b: "MyChart via SMART on FHIR and Apple Health Records — tested on Epic’s developer sandbox." },
-  { s: "now", label: "In progress", t: "Beta on real iPhones", b: "End-to-end testing with real pre-op and discharge papers.", when: site.roadmap.beta },
-  { s: "next", label: "Next", t: "Clinic pilots", b: "First surgical cohorts with partner clinics.", when: site.roadmap.pilots },
-];
-
-const placeholderStats = [
-  { value: "00%", label: "Lorem ipsum dolor sit amet consectetur adipiscing elit.", source: "% of patients who misunderstand discharge instructions + source" },
-  { value: "0 in 0", label: "Lorem ipsum dolor sit amet, sed do eiusmod tempor.", source: "medication errors or non-adherence after surgery + source" },
-  { value: "$00B", label: "Lorem ipsum dolor sit amet ut labore et dolore magna.", source: "cost of avoidable readmissions or cancelled surgeries + source" },
-];
-
-const placeholderQuotes = [{ quote: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore.", by: "Lorem Ipsum" }];
-
-const placeholderTeam = [
-  { name: "Lorem Ipsum", role: "Co-founder" },
-  { name: "Dolor Sit", role: "Co-founder" },
 ];
 
 const faqs = [
@@ -103,18 +86,11 @@ const faqs = [
     q: "Is it easy to use for older adults?",
     a: "Yes. The Simple look has big tiles, big buttons, one thing per screen, almost no scrolling and a “Read to me” button. You can switch between Classic and Simple at any time.",
   },
-  ...(site.faq.caregivers || SHOW_PLACEHOLDERS
-    ? [{ q: "Can a family member or caregiver help?", a: <Ph value={site.faq.caregivers} note="caregiver / family plans" /> }]
-    : []),
-  ...(site.faq.launchAndDevices || SHOW_PLACEHOLDERS
-    ? [{ q: "When does Remedy launch, and which iPhones are supported?", a: <Ph value={site.faq.launchAndDevices} note="launch timing, TestFlight, pricing, supported iPhones" /> }]
-    : []),
+  { q: "Can a family member or caregiver help?", a: site.faq.caregivers },
+  { q: "When does Remedy launch, and what do I need?", a: site.faq.launchAndDevices },
 ];
 
 export default function Home() {
-  const stats = site.stats.length ? site.stats : SHOW_PLACEHOLDERS ? placeholderStats : [];
-  const team: Person[] = site.team.length ? site.team : SHOW_PLACEHOLDERS ? placeholderTeam : [];
-  const quotes = site.testimonials.length ? site.testimonials : SHOW_PLACEHOLDERS ? placeholderQuotes : [];
 
   return (
     <>
@@ -123,7 +99,7 @@ export default function Home() {
         <div className="container hero-grid">
           <div className="hero-copy">
             <span className="eyebrow" data-reveal>
-              <span className="dot" /> Coming soon to iPhone
+              <span className="dot" /> Coming to iPhone · {site.launch}
             </span>
             <h1 className="h-display" data-reveal style={{ ["--d" as string]: 1 }}>
               Recovery,
@@ -135,14 +111,12 @@ export default function Home() {
               what to stop, what you can and can’t do yet, and when your visits are.
             </p>
             <div className="hero-actions" data-reveal style={{ ["--d" as string]: 3 }}>
-              <Link href="#waitlist" className="btn btn-primary" data-magnetic>
-                Join the waitlist <Arrow />
+              <Link href="#demo" className="btn btn-primary" data-magnetic>
+                Watch the demo <Arrow />
               </Link>
-              {site.demoVideo.youtubeId && (
-                <Link href="#demo" className="btn btn-glass" data-magnetic>
-                  Watch the demo
-                </Link>
-              )}
+              <Link href="/screens" className="btn btn-glass" data-magnetic>
+                See every screen
+              </Link>
             </div>
             <div className="hero-meta" data-reveal style={{ ["--d" as string]: 4 }}>
               <span className="check"><Check /> Every item from your own papers or record</span>
@@ -171,17 +145,6 @@ export default function Home() {
             </div>
           </div>
         </div>
-        {(site.partners.length > 0 || SHOW_PLACEHOLDERS) && (
-          <div className="container" style={{ textAlign: "center", marginTop: 28 }}>
-            {site.partners.length > 0 ? (
-              <p className="muted" style={{ fontSize: 14, margin: 0 }}>
-                Piloting with {site.partners.join(" · ")}
-              </p>
-            ) : (
-              <Note>optional: pilot / partner clinic names — set partners in lib/site.ts</Note>
-            )}
-          </div>
-        )}
       </section>
 
       {/* ---------- PROBLEM ---------- */}
@@ -197,26 +160,19 @@ export default function Home() {
               and rules that change day by day — often while tired, in pain, or relying on family to keep track.
             </p>
           </div>
-          {stats.length > 0 && (
-            <div className="stats">
-              {stats.map((s, i) => (
+          <div className="stats">
+            {site.stats.map((s, i) => (
                 <div className="stat glass" data-spot data-reveal style={{ ["--d" as string]: i }} key={i}>
                   <div className="stat-num mint-text">{s.value}</div>
                   <p>{s.label}</p>
-                  {site.stats.length ? (
-                    <p className="muted" style={{ marginTop: 10, fontSize: 12.5 }}>Source: {s.source}</p>
-                  ) : (
-                    <p className="ph" style={{ marginTop: 8 }}>(Stat: {s.source})</p>
-                  )}
+                  <p className="muted" style={{ marginTop: 10, fontSize: 12.5 }}>Source: {s.source}</p>
                 </div>
               ))}
-            </div>
-          )}
+          </div>
         </div>
       </section>
 
       {/* ---------- DEMO VIDEO ---------- */}
-      {(site.demoVideo.youtubeId || SHOW_PLACEHOLDERS) && (
       <section className="section" id="demo" style={{ paddingTop: 40 }}>
         <div className="container">
           <div className="section-head center">
@@ -228,7 +184,6 @@ export default function Home() {
           <VideoSection />
         </div>
       </section>
-      )}
 
       {/* ---------- HOW IT WORKS ---------- */}
       <section className="section" id="how">
@@ -413,15 +368,13 @@ export default function Home() {
             </h2>
           </div>
           <div className="roadmap">
-            {roadmap.filter((r) => r.s === "done" || ("when" in r && r.when) || SHOW_PLACEHOLDERS).map((r, i) => (
+            {roadmap.map((r, i) => (
               <div className="rm glass" data-spot data-reveal style={{ ["--d" as string]: i }} key={r.t}>
-                <span className={`rm-status ${r.s}`} style={{ color: r.s === "done" ? "var(--mint-700)" : "var(--pink-700)" }}>
+                <span className={`rm-status ${r.s}`} style={{ color: "var(--mint-700)" }}>
                   <i /> {r.label}
-                  {"when" in r && r.when && <span className="muted" style={{ fontWeight: 500 }}>· {r.when}</span>}
                 </span>
                 <h4>{r.t}</h4>
                 <p>{r.b}</p>
-                {"when" in r && !r.when && <Note>target date</Note>}
               </div>
             ))}
           </div>
@@ -429,34 +382,29 @@ export default function Home() {
       </section>
 
       {/* ---------- QUOTES ---------- */}
-      {quotes.length > 0 && (
-        <section className="section-tight" id="quotes">
+      <section className="section-tight" id="quotes">
           <div className="container">
             <div className="section-head center">
               <span className="eyebrow" data-reveal>From clinicians</span>
               <h2 className="h-1" data-reveal>
                 What care teams <span className="serif mint-text">are saying.</span>
               </h2>
-              {!site.testimonials.length && <Note>quotes from clinicians, beta testers or caregivers</Note>}
             </div>
-            <Quotes quotes={quotes} />
+            <Quotes quotes={site.testimonials} />
           </div>
         </section>
-      )}
 
       {/* ---------- TEAM ---------- */}
-      {team.length > 0 && (
-        <section className="section-tight" id="team">
+      <section className="section-tight" id="team">
           <div className="container">
             <div className="section-head center">
               <span className="eyebrow" data-reveal>Team</span>
               <h2 className="h-1" data-reveal>
                 The people behind <span className="serif mint-text">Remedy.</span>
               </h2>
-              {!site.team.length && <Note>founders: name and role — set team in lib/site.ts</Note>}
             </div>
             <div className="team">
-              {team.map((m, i) => (
+              {site.team.map((m, i) => (
                 <div className="member glass" data-spot data-reveal style={{ ["--d" as string]: i }} key={m.name}>
                   <h4>{m.name}</h4>
                   <div className="role">{m.role}</div>
@@ -465,7 +413,6 @@ export default function Home() {
             </div>
           </div>
         </section>
-      )}
 
       {/* ---------- CLINIC CTA ---------- */}
       <section className="section-tight">
@@ -494,20 +441,21 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ---------- WAITLIST ---------- */}
-      <section className="section" id="waitlist" style={{ paddingTop: 20 }}>
+      {/* ---------- LAUNCH ---------- */}
+      <section className="section" id="launch" style={{ paddingTop: 20 }}>
         <div className="container">
           <div className="cta glass" data-spot data-reveal>
             <Capsule className="cta-capsule" interactive={false} />
             <span className="eyebrow">
-              <span className="dot" /> {site.launch ? `Launching ${site.launch}` : "Coming soon"}
-              {!site.launch && <Note>launch month / season</Note>}
+              <span className="dot" /> Launching {site.launch}
             </span>
             <h2 className="h-1" style={{ maxWidth: 760 }}>
-              Be first to try <span className="serif mint-text">Remedy.</span>
+              Coming to iPhone <span className="serif mint-text">this winter.</span>
             </h2>
-            <p className="lead">Join the waitlist and we’ll let you know when Remedy is ready.</p>
-            <Waitlist />
+            <p className="lead">Questions, or want to hear when it’s out? Email us.</p>
+            <a href={`mailto:${site.email}`} className="btn btn-primary" data-magnetic>
+              {site.email} <Arrow />
+            </a>
           </div>
         </div>
       </section>

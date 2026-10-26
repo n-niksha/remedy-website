@@ -21,7 +21,7 @@ export const metadata: Metadata = {
     "Remedy turns the papers you get before and after surgery into a simple, day-by-day plan: what to take, what to stop, what you can and can't do yet, and when your visits are — every item confirmed by you.",
   openGraph: {
     title: "Remedy",
-    description: "Recovery, made simple. Coming soon to iPhone.",
+    description: "Recovery, made simple. Coming to iPhone Winter 2026.",
     images: ["/logo.png"],
   },
 };

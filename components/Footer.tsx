@@ -1,7 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
-import { site, SHOW_PLACEHOLDERS } from "@/lib/site";
-import { Note } from "./Ph";
+import { site } from "@/lib/site";
 
 export default function Footer() {
   return (
@@ -16,13 +15,8 @@ export default function Footer() {
               Remedy
             </Link>
             <p className="muted" style={{ margin: "14px 0 0", maxWidth: 320, fontSize: 15 }}>
-              Recovery, made simple. Coming soon to iPhone.
+              Recovery, made simple. Coming to iPhone {site.launch}.
             </p>
-            {site.footerNote ? (
-              <p className="muted" style={{ marginTop: 6, fontSize: 14 }}>{site.footerNote}</p>
-            ) : (
-              <p style={{ marginTop: 8 }}><Note>optional line, e.g. “Built in Austin, TX”</Note></p>
-            )}
           </div>
           <div>
             <h6>Product</h6>
@@ -44,16 +38,10 @@ export default function Footer() {
           <div>
             <h6>Company</h6>
             <ul>
-              <li><Link href="/privacy">Privacy</Link></li>
-              {site.email ? (
-                <li><a href={`mailto:${site.email}`}>{site.email}</a></li>
-              ) : (
-                SHOW_PLACEHOLDERS && <li><Note>contact email</Note></li>
-              )}
+              <li><a href={`mailto:${site.email}`}>{site.email}</a></li>
               {site.socials.map((s) => (
                 <li key={s.href}><a href={s.href} target="_blank" rel="noreferrer">{s.label}</a></li>
               ))}
-              {site.socials.length === 0 && SHOW_PLACEHOLDERS && <li><Note>LinkedIn / Instagram links</Note></li>}
             </ul>
           </div>
         </div>

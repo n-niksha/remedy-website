@@ -223,14 +223,6 @@ select {
   margin: 0 auto;
 }
 
-/* Placeholder copy the team still needs to write */
-.ph {
-  color: var(--pink-700);
-  font-style: italic;
-  font-size: 0.86em;
-  opacity: 0.9;
-}
-
 /* ============================================================
    Liquid glass
    ============================================================ */
@@ -1048,26 +1040,6 @@ body.cursor-text .cursor-ring {
 
 .play-btn:hover {
   transform: scale(1.08);
-}
-
-.video-tag {
-  position: absolute;
-  top: 20px;
-  left: 20px;
-  padding: 8px 14px;
-  border-radius: 999px;
-  font-size: 13px;
-  font-weight: 500;
-}
-
-.video-time {
-  position: absolute;
-  bottom: 20px;
-  right: 20px;
-  padding: 8px 14px;
-  border-radius: 999px;
-  font-size: 13px;
-  font-variant-numeric: tabular-nums;
 }
 
 /* ============================================================
@@ -1954,24 +1926,8 @@ body.cursor-text .cursor-ring {
   }
 }
 
-.avatar {
-  width: 48px;
-  height: 48px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, var(--mint-300), var(--pink-300));
-  box-shadow: 0 0 0 3px #fff;
-}
-
-.person {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  text-align: left;
-  font-size: 14px;
-}
-
 /* ============================================================
-   CTA / waitlist
+   CTA / launch
    ============================================================ */
 .cta {
   padding: 80px 48px;
@@ -1991,50 +1947,9 @@ body.cursor-text .cursor-ring {
   pointer-events: none;
 }
 
-.waitlist {
-  display: flex;
-  gap: 8px;
-  width: 100%;
-  max-width: 480px;
-  padding: 6px;
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.7);
-  border: 1px solid #fff;
-  box-shadow: 0 1px 0 #fff inset, 0 14px 30px -16px rgba(20, 48, 42, 0.35);
-}
-
-.waitlist input {
-  flex: 1;
-  min-width: 0;
-  border: 0;
-  background: transparent;
-  padding: 0 18px;
-  font-size: 15.5px;
-  outline: none;
-}
-
-.waitlist-done {
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  padding: 16px 22px;
-  border-radius: 999px;
-  background: var(--mint-100);
-  color: var(--mint-700);
-  font-weight: 550;
-  animation: screenIn 0.5s var(--ease);
-}
-
 @media (max-width: 520px) {
   .cta {
     padding: 56px 20px;
-  }
-  .waitlist {
-    flex-direction: column;
-    border-radius: 26px;
-  }
-  .waitlist input {
-    height: 48px;
   }
 }
 
@@ -2104,65 +2019,6 @@ body.cursor-text .cursor-ring {
 }
 
 /* ============================================================
-   Forms (clinic contact)
-   ============================================================ */
-.form {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 14px;
-  padding: 32px;
-}
-
-.form .full {
-  grid-column: 1 / -1;
-}
-
-.field {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  font-size: 13.5px;
-  font-weight: 500;
-  color: var(--ink-2);
-}
-
-.field input,
-.field select,
-.field textarea {
-  height: 50px;
-  padding: 0 16px;
-  border-radius: 14px;
-  border: 1px solid rgba(255, 255, 255, 0.95);
-  background: rgba(255, 255, 255, 0.65);
-  font-size: 15px;
-  font-weight: 400;
-  color: var(--ink);
-  outline: none;
-  transition: border-color 0.25s, box-shadow 0.25s, background 0.25s;
-}
-
-.field textarea {
-  height: 120px;
-  padding: 14px 16px;
-  resize: vertical;
-}
-
-.field input:focus,
-.field select:focus,
-.field textarea:focus {
-  background: #fff;
-  border-color: var(--mint-400);
-  box-shadow: 0 0 0 4px rgba(111, 209, 184, 0.25);
-}
-
-@media (max-width: 640px) {
-  .form {
-    grid-template-columns: 1fr;
-    padding: 22px;
-  }
-}
-
-/* ============================================================
    Clinics page
    ============================================================ */
 .page-hero {
@@ -2192,46 +2048,12 @@ body.cursor-text .cursor-ring {
   border-radius: 2px;
 }
 
-.t-step {
-  position: relative;
-  padding-top: 76px;
-}
-
-.t-dot {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 58px;
-  height: 58px;
-  border-radius: 20px;
-  display: grid;
-  place-items: center;
-  font-weight: 650;
-  color: var(--mint-700);
-}
-
-.t-step h4 {
-  margin: 0 0 6px;
-  font-size: 18px;
-  font-weight: 600;
-}
-
-.t-step p {
-  margin: 0;
-  color: var(--ink-2);
-  font-size: 15px;
-}
-
 @media (max-width: 860px) {
   .timeline {
     grid-template-columns: 1fr;
   }
   .timeline::before {
     display: none;
-  }
-  .t-step {
-    padding: 0 0 0 76px;
-    min-height: 58px;
   }
 }
 
@@ -2285,36 +2107,6 @@ body.cursor-text .cursor-ring {
 
 .compare .x {
   color: var(--pink-700);
-}
-
-/* ============================================================
-   Prose (privacy)
-   ============================================================ */
-.prose {
-  max-width: 760px;
-  margin: 0 auto;
-  padding: 48px;
-}
-
-.prose h2 {
-  font-size: 24px;
-  letter-spacing: -0.02em;
-  margin: 36px 0 10px;
-}
-
-.prose h2:first-child {
-  margin-top: 0;
-}
-
-.prose p,
-.prose li {
-  color: var(--ink-2);
-}
-
-@media (max-width: 640px) {
-  .prose {
-    padding: 28px 22px;
-  }
 }
 
 /* ============================================================
@@ -2481,12 +2273,6 @@ body {
   overflow-x: clip;
 }
 
-.feature p.ph,
-.lead .ph,
-p.ph {
-  color: var(--pink-700);
-}
-
 .scroll-progress {
   position: fixed;
   top: 0;
@@ -2514,19 +2300,6 @@ p.ph {
   bottom: 12%;
   left: auto;
   right: calc(50% - 330px);
-}
-
-.play-pulse {
-  position: relative;
-}
-
-.play-pulse::after {
-  content: "";
-  position: absolute;
-  inset: -1px;
-  border-radius: 50%;
-  border: 1px solid rgba(255, 255, 255, 0.9);
-  animation: ripple 2.6s var(--ease) infinite;
 }
 
 @keyframes ripple {

@@ -4,6 +4,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
+import { site } from "@/lib/site";
 
 const links = [
   { href: "/#how", label: "How it works" },
@@ -74,11 +75,11 @@ export default function Nav() {
         </div>
 
         <div className="nav-cta">
-          <Link href="/clinics#contact" className="btn btn-glass btn-sm">
+          <a href={`mailto:${site.email}`} className="btn btn-glass btn-sm">
             Contact
-          </Link>
-          <Link href="/#waitlist" className="btn btn-primary btn-sm" data-magnetic>
-            Join waitlist
+          </a>
+          <Link href="/#demo" className="btn btn-primary btn-sm" data-magnetic>
+            Watch demo
           </Link>
           <button
             className={`nav-toggle ${open ? "open" : ""}`}
@@ -98,11 +99,11 @@ export default function Nav() {
             {l.label}
           </Link>
         ))}
-        <Link href="/clinics#contact" onClick={() => setOpen(false)}>
+        <a href={`mailto:${site.email}`} onClick={() => setOpen(false)}>
           Contact
-        </Link>
-        <Link href="/#waitlist" className="btn btn-primary" onClick={() => setOpen(false)}>
-          Join waitlist
+        </a>
+        <Link href="/#demo" className="btn btn-primary" onClick={() => setOpen(false)}>
+          Watch demo
         </Link>
       </div>
     </div>
