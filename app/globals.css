@@ -586,8 +586,9 @@ body.cursor-text .cursor-ring {
 }
 
 .nav.scrolled {
-  max-width: 900px;
+  max-width: 1000px;
   height: 58px;
+  background: linear-gradient(140deg, rgba(255, 255, 255, 0.86), rgba(255, 255, 255, 0.7));
 }
 
 .brand {
@@ -597,6 +598,7 @@ body.cursor-text .cursor-ring {
   font-weight: 650;
   font-size: 19px;
   letter-spacing: -0.02em;
+  flex-shrink: 0;
 }
 
 .brand-mark {
@@ -618,6 +620,7 @@ body.cursor-text .cursor-ring {
   padding: 9px 14px;
   border-radius: 999px;
   font-size: 14.5px;
+  white-space: nowrap;
   color: var(--ink-2);
   transition: background 0.25s, color 0.25s;
 }
@@ -632,6 +635,11 @@ body.cursor-text .cursor-ring {
   display: flex;
   align-items: center;
   gap: 8px;
+  flex-shrink: 0;
+}
+
+.nav-cta .btn {
+  white-space: nowrap;
 }
 
 .nav-toggle {
@@ -680,7 +688,7 @@ body.cursor-text .cursor-ring {
   background: rgba(255, 255, 255, 0.6);
 }
 
-@media (max-width: 860px) {
+@media (max-width: 1040px) {
   .nav-links,
   .nav-cta .btn-glass {
     display: none;
